@@ -75,6 +75,7 @@ export const LeadDashboard: React.FC<LeadDashboardProps> = ({ leads, onUpdateLea
     total: leads.length,
     highScore: leads.filter(l => l.score >= 80).length,
     totalValue: leads.reduce((sum, lead) => sum + lead.finalPrice, 0),
+    totalProfit: leads.reduce((sum, lead) => sum + (lead.finalPrice - lead.estimatedCost), 0),
     avgScore: leads.length > 0 ? Math.round(leads.reduce((sum, lead) => sum + lead.score, 0) / leads.length) : 0
   };
 
@@ -121,14 +122,14 @@ export const LeadDashboard: React.FC<LeadDashboardProps> = ({ leads, onUpdateLea
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Försäljningspotential</CardTitle>
-            <Euro className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {stats.totalValue.toLocaleString("sv-SE")} kr
             </div>
             <p className="text-xs text-muted-foreground">
-              Alla aktiva leads
+              varav {stats.totalProfit.toLocaleString("sv-SE")} kr vinst
             </p>
           </CardContent>
         </Card>
@@ -232,7 +233,7 @@ export const LeadDashboard: React.FC<LeadDashboardProps> = ({ leads, onUpdateLea
             <h3 className="text-lg font-semibold mb-2">Inga leads hittades</h3>
             <p className="text-muted-foreground">
               {leads.length === 0 
-                ? "Inga leads har skapats än. Vänta på inkommande förfrågningar från chat-widgeten."
+                ? "Inga leads har skapats än."
                 : "Prova att ändra filter eller sökterm för att hitta leads."
               }
             </p>
