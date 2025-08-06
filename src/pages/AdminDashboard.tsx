@@ -237,7 +237,12 @@ const AdminDashboard = () => {
       setLeads(exampleLeads);
       localStorage.setItem('leads', JSON.stringify(exampleLeads));
     } else {
-      setLeads(savedLeads);
+      // Convert createdAt strings back to Date objects
+      const leadsWithDates = savedLeads.map((lead: any) => ({
+        ...lead,
+        createdAt: new Date(lead.createdAt)
+      }));
+      setLeads(leadsWithDates);
     }
   }, []);
 
