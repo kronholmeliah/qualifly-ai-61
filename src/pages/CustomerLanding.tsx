@@ -1,25 +1,43 @@
 import React from "react";
-import { LeadChatWidget } from "@/components/LeadChatWidget";
+import { EnhancedLeadChatWidget } from "@/components/EnhancedLeadChatWidget";
 import { Lead } from "@/types/lead";
 import { calculateLeadScore } from "@/utils/leadScoring";
 
 const CustomerLanding = () => {
-  const handleLeadSubmitted = (leadData: any) => {
+  const handleLeadSubmitted = (data: { lead: any }) => {
+    const leadData = data.lead;
+    
+    // Map the detailed lead data to the existing Lead interface
     const newLead: Lead = {
       id: Date.now().toString(),
-      serviceType: leadData.serviceType,
-      scope: leadData.scope,
-      location: leadData.location,
-      timeframe: leadData.timeframe,
-      notes: leadData.notes,
-      attachments: leadData.attachments,
-      estimatedCost: leadData.estimatedCost,
+      serviceType: leadData.projekttyp || "Annat",
+      scope: leadData.kort_beskrivning || "",
+      location: leadData.adress || "",
+      timeframe: leadData.onskad_start || "Flexibel",
+      notes: `Kund: ${leadData.kund_namn}\nKontakt: ${leadData.kontakt}\nStatus: ${leadData.status}\n\nTekniska detaljer:\nEl: ${leadData.elinstallation}\nVVS: ${leadData.vvs_installation}\nGolvvärme: ${leadData.golvvärme}\nRivning: ${leadData.rivning}\nBärande: ${leadData.barande_ingrepp}\nBygglov: ${leadData.bygglov_status}\nMark: ${leadData.markarbete}\nÖvrigt tekniskt: ${leadData.ovriga_tekniska_krav}\n\nMaterial & Stil:\nMaterialansvar: ${leadData.materialansvar}\nMaterialpref: ${leadData.materialpreferenser}\nStil: ${leadData.stilpreferens}\nInspiration: ${leadData.inspirationsbilder}\nTillval: ${leadData.tillval}\nSpecialönskemål: ${leadData.specialonskemal}\n\nPlanering:\nRitning: ${leadData.ritning_bifogad}\nDeadline: ${leadData.deadline}`,
+      attachments: [],
+      estimatedCost: 50000, // Default estimate, will be calculated based on project type
       score: 0,
       margin: 20, // Default 20% margin
       finalPrice: 0,
       createdAt: new Date(),
       status: "new"
     };
+
+    // Simple cost estimation based on project type
+    const costMap: Record<string, number> = {
+      "Badrum": 200000,
+      "Kök": 300000,
+      "Helrenovering": 800000,
+      "Målning": 30000,
+      "Golvläggning": 50000,
+      "Elinstallation": 20000,
+      "VVS-arbeten": 25000,
+      "Altan": 80000,
+      "Annat": 50000
+    };
+    
+    newLead.estimatedCost = costMap[newLead.serviceType] || 50000;
 
     // Calculate score and final price
     const { score } = calculateLeadScore(newLead);
@@ -30,6 +48,11 @@ const CustomerLanding = () => {
     const existingLeads = JSON.parse(localStorage.getItem('leads') || '[]');
     const updatedLeads = [newLead, ...existingLeads];
     localStorage.setItem('leads', JSON.stringify(updatedLeads));
+    
+    // Also save the detailed lead data separately for future reference
+    const detailedLeads = JSON.parse(localStorage.getItem('detailedLeads') || '[]');
+    const updatedDetailedLeads = [{ ...leadData, id: newLead.id, createdAt: new Date() }, ...detailedLeads];
+    localStorage.setItem('detailedLeads', JSON.stringify(updatedDetailedLeads));
   };
 
   return (
@@ -78,7 +101,7 @@ const CustomerLanding = () => {
         </div>
       </div>
       
-      <LeadChatWidget onLeadSubmitted={handleLeadSubmitted} />
+      <EnhancedLeadChatWidget onLeadSubmitted={handleLeadSubmitted} />
     </div>
   );
 };
