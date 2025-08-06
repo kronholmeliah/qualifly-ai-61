@@ -29,7 +29,7 @@ const AdminDashboard = () => {
           customerName: "Sara Andersson",
           customerContact: "sara.andersson@email.com",
           customerAddress: "Köpmansgatan 4, 111 31 Stockholm",
-          detailedDescription: "Sara vill göra en total renovering av sitt 8 kvm badrum. Projektet omfattar rivning av befintligt kakel, installation av golvvärme, nya VVS-system, elinstallationer och kakel på golv och väggar.",
+          detailedDescription: "Befintligt badrum från 1975, ca 6 m², med ursprungliga installationer. Omfattar: byte av alla sanitetsartiklar (toalett, handfat, duschkabin), rivning av befintligt kakel på väggar och golv, ny membranbeläggning, installation av golvvärme, takåtgärd för fuktskydd, ny belysning och ventilation. Vattenledningar från 1970-talet behöver ses över. Befintlig el är jordad men saknar FI-skydd för våtrum.",
           projectType: "Badrum",
           renovationType: "Renovering",
           technicalRequirements: {
@@ -73,7 +73,7 @@ const AdminDashboard = () => {
           customerName: "Erik Johansson",
           customerContact: "erik.j@gmail.com",
           customerAddress: "Vasagatan 12, 411 24 Göteborg",
-          detailedDescription: "Erik äger ett 15 kvm kök som behöver totalrenoveras. Vill öppna upp mot vardagsrummet och skapa ett modernt kök med köksö och nya vitvaror.",
+          detailedDescription: "Befintligt kök från 1980-talet, 15 m², med ursprunglig inredning och vitvaror. Projektet omfattar: rivning av icke-bärande vägg mellan kök och vardagsrum för att skapa öppet planlösning (ca 3 meter vägg), komplett rivning av befintliga köksskåp och bänkskivor, ny elinstallation för induktionshäll och moderna vitvaror, VVS-arbeten för diskmaskin och kylskåp med vattenanslutning, installation av köksö med integrerad diskbänk, ny ventilationslösning med kraftfull köksfläkt. Befintligt golv (laminat) kommer att bytas mot klinkergolv.",
           projectType: "Kök",
           renovationType: "Renovering",
           technicalRequirements: {
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
           customerName: "Anna Nilsson",
           customerContact: "070-123-4567",
           customerAddress: "Storgatan 8, 211 34 Malmö",
-          detailedDescription: "Anna ska sälja sin lägenhet och behöver snabbt måla om vardagsrum och sovrum för att öka försäljningsvärdet.",
+          detailedDescription: "Målningsarbete i 2-rumslägenhet inför försäljning. Vardagsrum: 20 m², befintlig väggtapet ska rivas, väggar spackel och slipas, målning med 2 stryker färg. Sovrum: 12 m², befintlig färg i gott skick, endast 1 strykning efter grundlig rengöring. Tak i båda rum ska målas vita. Tidsperspektiv är kritiskt då visningar är inbokade om 2 veckor. Färgval ska vara neutralt för att tillgodose bred målgrupp av köpare. All möblering ska skyddas eller flyttas ut temporärt.",
           projectType: "Målning",
           renovationType: "Renovering",
           technicalRequirements: {
@@ -161,7 +161,7 @@ const AdminDashboard = () => {
           customerName: "Michael Berg",
           customerContact: "m.berg@company.se", 
           customerAddress: "Parkvägen 15, 752 37 Uppsala",
-          detailedDescription: "Michael äger en 75 kvm lägenhet från 1960-talet som behöver totalrenoveras. Allt ska bytas ut - golv, väggar, tak, kök, badrum, el och VVS.",
+          detailedDescription: "3-rumslägenhet från 1960-talet, 75 m², kräver totalrenovering. Befintligt: original parkettgolv (delvis skadat), tapeter från 1980-talet, kök och badrum i ursprungsskick, el-installation från 1960 utan jordning. Projektet omfattar: rivning av befintligt kök och badrum, ny elinstallation enligt moderna standarder, nya vatten- och avloppsledningar, installation av nya golv i alla rum, målning av alla väggar och tak, nytt kök med integrerade vitvaror, nytt badrum med dusch och badkar, nya innerdörrar och lister. Ventilationssystem behöver uppgraderas.",
           projectType: "Helrenovering",
           renovationType: "Renovering",
           technicalRequirements: {
@@ -205,7 +205,7 @@ const AdminDashboard = () => {
           customerName: "Lena Gustafsson",
           customerContact: "lena.g@hotmail.com",
           customerAddress: "Björkvägen 22, 722 13 Västerås",
-          detailedDescription: "Lena vill installera ett nytt badrum i sin villas källare. Behöver dra nya vatten- och avloppsledningar samt installera pump för avlopp.",
+          detailedDescription: "Installation av nytt badrum i villas källare, ca 8 m². Befintlig situation: obeslutat källarutrymme med betongbotten och tegelväggar, inga befintliga VVS-anslutningar. Projektet omfattar: borrning genom betongbotten för avloppsledning, installation av avloppspump då naturligt fall saknas, dragning av nya vattenledningar från huvudledning (ca 15 meter), anslutning till befintligt värmesystem för radiator, installation av komplett badrumsinstallation (dusch, toalett, handfat), ventilationslösning för fukthantering, vattenisolering av golv och väggar enligt BBR.",
           projectType: "VVS-arbeten",
           renovationType: "Nybyggnation",
           technicalRequirements: {
