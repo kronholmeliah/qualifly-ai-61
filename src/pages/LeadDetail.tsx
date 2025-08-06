@@ -12,11 +12,9 @@ import {
   Calendar, 
   Euro, 
   User, 
-  Mail, 
   Phone,
   Home,
   Wrench,
-  Palette,
   ClipboardList
 } from "lucide-react";
 
@@ -105,9 +103,9 @@ const LeadDetail = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <Phone className="h-4 w-4 text-muted-foreground" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Kontakt</p>
+                      <p className="text-sm text-muted-foreground">Telefon</p>
                       <p className="font-medium">{lead.customerContact}</p>
                     </div>
                   </div>
@@ -166,7 +164,7 @@ const LeadDetail = () => {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {lead.technicalRequirements && Object.entries(lead.technicalRequirements).map(([key, value]) => (
-                    value && (
+                    value && key !== 'permits' && (
                       <div key={key}>
                         <p className="text-sm font-medium text-muted-foreground mb-1">
                           {key === 'electrical' ? 'Elinstallation' :
@@ -174,7 +172,6 @@ const LeadDetail = () => {
                            key === 'heating' ? 'Värme/Golvvärme' :
                            key === 'demolition' ? 'Rivning' :
                            key === 'structuralWork' ? 'Bärande ingrepp' :
-                           key === 'permits' ? 'Bygglov' :
                            key === 'groundwork' ? 'Markarbete' :
                            'Övrigt'}
                         </p>
@@ -186,34 +183,6 @@ const LeadDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Materials & Style */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Palette className="h-5 w-5" />
-                  Material & stil
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {lead.materials && Object.entries(lead.materials).map(([key, value]) => (
-                    value && (
-                      <div key={key}>
-                        <p className="text-sm font-medium text-muted-foreground mb-1">
-                          {key === 'responsibility' ? 'Materialansvar' :
-                           key === 'preferences' ? 'Materialpreferenser' :
-                           key === 'style' ? 'Stilpreferens' :
-                           key === 'inspirationImages' ? 'Inspirationsbilder' :
-                           key === 'extras' ? 'Tillval' :
-                           'Specialönskemål'}
-                        </p>
-                        <p className="text-sm">{value}</p>
-                      </div>
-                    )
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           {/* Sidebar */}
@@ -267,10 +236,13 @@ const LeadDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Project Info */}
+            {/* Timeframe */}
             <Card>
               <CardHeader>
-                <CardTitle>Projektinfo</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  Tidsram
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-2">
@@ -299,28 +271,27 @@ const LeadDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Planning */}
-            {lead.planning && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Planering</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {Object.entries(lead.planning).map(([key, value]) => (
-                    value && (
-                      <div key={key}>
-                        <p className="text-sm font-medium text-muted-foreground mb-1">
-                          {key === 'drawingsIncluded' ? 'Ritningar' :
-                           key === 'desiredStart' ? 'Önskad start' :
-                           'Deadline'}
-                        </p>
-                        <p className="text-sm">{value}</p>
-                      </div>
-                    )
-                  ))}
-                </CardContent>
-              </Card>
-            )}
+            {/* Uploaded Files */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ClipboardList className="h-5 w-5" />
+                  Uppladdade filer
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {lead.attachments && lead.attachments.length > 0 ? (
+                  lead.attachments.map((file, index) => (
+                    <div key={index} className="flex items-center gap-2 p-2 bg-secondary rounded">
+                      <ClipboardList className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{file.name || `Fil ${index + 1}`}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">Inga filer uppladdade</p>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
