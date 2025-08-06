@@ -12,6 +12,36 @@ export interface Lead {
   finalPrice: number;
   createdAt: Date;
   status: "new" | "contacted" | "quoted" | "closed";
+  // Enhanced customer details
+  customerName?: string;
+  customerContact?: string;
+  customerAddress?: string;
+  detailedDescription?: string;
+  projectType?: string;
+  renovationType?: string;
+  technicalRequirements?: {
+    electrical?: string;
+    plumbing?: string;
+    heating?: string;
+    demolition?: string;
+    structuralWork?: string;
+    permits?: string;
+    groundwork?: string;
+    otherTechnical?: string;
+  };
+  materials?: {
+    responsibility?: string;
+    preferences?: string;
+    style?: string;
+    inspirationImages?: string;
+    extras?: string;
+    specialRequests?: string;
+  };
+  planning?: {
+    drawingsIncluded?: string;
+    desiredStart?: string;
+    deadline?: string;
+  };
 }
 
 export interface LeadScoreFactors {

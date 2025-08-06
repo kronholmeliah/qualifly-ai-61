@@ -1,8 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar, Euro, FileText } from "lucide-react";
+import { MapPin, Calendar, Euro, FileText, User } from "lucide-react";
 import { Lead } from "@/types/lead";
 import { getScoreColor, getScoreEmoji } from "@/utils/leadScoring";
 import { cn } from "@/lib/utils";
@@ -13,13 +14,18 @@ interface LeadCardProps {
 }
 
 export const LeadCard: React.FC<LeadCardProps> = ({ lead, onClick }) => {
+  const navigate = useNavigate();
   const scoreColor = getScoreColor(lead.score);
   const scoreEmoji = getScoreEmoji(lead.score);
+  
+  const handleClick = () => {
+    navigate(`/admin/lead/${lead.id}`);
+  };
   
   return (
     <Card 
       className="cursor-pointer transition-all duration-200 hover:shadow-md hover:bg-card-hover border-l-4 border-l-primary/20"
-      onClick={onClick}
+      onClick={handleClick}
     >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
@@ -34,6 +40,10 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onClick }) => {
               </Badge>
             </div>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <User className="h-3 w-3" />
+                {lead.customerName || "Okänd kund"}
+              </div>
               <div className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
                 {lead.location}
