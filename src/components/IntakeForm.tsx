@@ -66,14 +66,14 @@ const categories: CategoryConfig[] = [
     name: 'Nyproduktion',
     icon: <Building className="w-6 h-6" />,
     fields: [
-      { id: 'type', label: 'Typ', type: 'select', options: ['Villa', 'Attefall', 'Garage', 'Förråd', 'Annat'], required: true },
-      { id: 'size', label: 'Storlek (m²)', type: 'number', required: true },
-      { id: 'floors', label: 'Antal våningar', type: 'number', required: true },
-      { id: 'drawings', label: 'Ritningar', type: 'select', options: ['Finns', 'Behövs hjälp'], required: true },
-      { id: 'permit', label: 'Bygglov', type: 'select', options: ['Klart', 'Inskickat', 'Ej klart'], required: true },
-      { id: 'frame', label: 'Stomme', type: 'select', options: ['Trä', 'Betong', 'Stål', 'Osäker'] },
-      { id: 'groundwork', label: 'Mark- och grundarbete', type: 'select', options: ['Inkludera', 'Ej aktuellt'] },
-      { id: 'energy', label: 'Energilösning', type: 'select', options: ['Värmepump', 'Solceller', 'Fjärrvärme', 'Osäker'] }
+      { id: 'type', label: 'Vilken typ av nyproduktion planerar du?', type: 'select', options: ['Villa', 'Attefall', 'Garage', 'Förråd', 'Annat'], required: true },
+      { id: 'size', label: 'Hur stor ska byggnaden vara? (ange storlek i m²)', type: 'number', required: true },
+      { id: 'floors', label: 'Hur många våningar ska byggnaden ha?', type: 'number', required: true },
+      { id: 'drawings', label: 'Har du redan ritningar för projektet?', type: 'select', options: ['Ja, ritningar finns', 'Nej, behöver hjälp med ritningar'], required: true },
+      { id: 'permit', label: 'Vad är status på bygglovet?', type: 'select', options: ['Bygglov är klart', 'Bygglov är inskickat', 'Bygglov är inte påbörjat'], required: true },
+      { id: 'frame', label: 'Vilken typ av stomme föredrar du?', type: 'select', options: ['Trä', 'Betong', 'Stål', 'Vet inte/osäker'] },
+      { id: 'groundwork', label: 'Ska mark- och grundarbete ingå i projektet?', type: 'select', options: ['Ja, inkludera', 'Nej, inte aktuellt'] },
+      { id: 'energy', label: 'Vilken energilösning föredrar du?', type: 'select', options: ['Värmepump', 'Solceller', 'Fjärrvärme', 'Vet inte/osäker'] }
     ]
   },
   {
@@ -81,13 +81,13 @@ const categories: CategoryConfig[] = [
     name: 'Tillbyggnad',
     icon: <Plus className="w-6 h-6" />,
     fields: [
-      { id: 'type', label: 'Typ', type: 'select', options: ['Rum', 'Uterum', 'Garage', 'Balkong', 'Annat'], required: true },
-      { id: 'size', label: 'Storlek (m²)', type: 'number', required: true },
-      { id: 'integration', label: 'Integration', type: 'multi-select', options: ['Kök', 'Badrum', 'El', 'VVS'] },
-      { id: 'foundation', label: 'Grundläggning/markarbete', type: 'select', options: ['Ja', 'Nej', 'Osäker'] },
-      { id: 'facade', label: 'Fasad/tak', type: 'select', options: ['Matcha husets stil', 'Avvika'] },
-      { id: 'permit', label: 'Bygglov', type: 'select', options: ['Klart', 'Behövs', 'På gång'] },
-      { id: 'insulation', label: 'Isolering/fönster/dörrar', type: 'select', options: ['Inkludera', 'Ej aktuellt'] }
+      { id: 'type', label: 'Vilken typ av tillbyggnad planerar du?', type: 'select', options: ['Rum', 'Uterum', 'Garage', 'Balkong', 'Annat'], required: true },
+      { id: 'size', label: 'Hur stor ska tillbyggnaden vara? (ange storlek i m²)', type: 'number', required: true },
+      { id: 'integration', label: 'Vilka installationer behöver integreras i tillbyggnaden?', type: 'multi-select', options: ['Kök', 'Badrum', 'El', 'VVS'] },
+      { id: 'foundation', label: 'Behövs grundläggning eller markarbete?', type: 'select', options: ['Ja', 'Nej', 'Osäker'] },
+      { id: 'facade', label: 'Hur ska tillbyggnaden förhålla sig till befintlig byggnad?', type: 'select', options: ['Matcha husets stil', 'Avvika från befintlig stil'] },
+      { id: 'permit', label: 'Vad är status på bygglovet?', type: 'select', options: ['Bygglov är klart', 'Bygglov behövs', 'Bygglov är på gång'] },
+      { id: 'insulation', label: 'Ska isolering, fönster och dörrar ingå?', type: 'select', options: ['Ja, inkludera', 'Nej, inte aktuellt'] }
     ]
   },
   {
@@ -95,14 +95,14 @@ const categories: CategoryConfig[] = [
     name: 'Tak',
     icon: <Home className="w-6 h-6" />,
     fields: [
-      { id: 'scope', label: 'Omfattning', type: 'select', options: ['Hela taket', 'Delar'], required: true },
-      { id: 'currentMaterial', label: 'Material idag', type: 'select', options: ['Tegel', 'Betong', 'Plåt', 'Papp', 'Osäker'] },
-      { id: 'materialChange', label: 'Materialbyte', type: 'select', options: ['Ja', 'Nej'] },
-      { id: 'problems', label: 'Problem idag', type: 'multi-select', options: ['Läckage', 'Isolering', 'Snöras', 'Inga'] },
-      { id: 'metalWork', label: 'Plåtarbeten', type: 'multi-select', options: ['Rännor', 'Hängrännor', 'Skorstensbeslag'] },
-      { id: 'insulation', label: 'Isolering', type: 'select', options: ['Behålla', 'Förbättra'] },
-      { id: 'access', label: 'Tillgång', type: 'select', options: ['Ställning', 'Lift', 'Osäker'] },
-      { id: 'solar', label: 'Solceller', type: 'select', options: ['Förbereda', 'Installera', 'Ej aktuellt'] }
+      { id: 'scope', label: 'Vilken omfattning har takprojektet?', type: 'select', options: ['Hela taket', 'Delar av taket'], required: true },
+      { id: 'currentMaterial', label: 'Vilket material har taket idag?', type: 'select', options: ['Tegel', 'Betong', 'Plåt', 'Papp', 'Vet inte/osäker'] },
+      { id: 'materialChange', label: 'Vill du byta material på taket?', type: 'select', options: ['Ja', 'Nej'] },
+      { id: 'problems', label: 'Vilka problem finns med taket idag?', type: 'multi-select', options: ['Läckage', 'Dålig isolering', 'Problem med snöras', 'Inga kända problem'] },
+      { id: 'metalWork', label: 'Vilka plåtarbeten behövs?', type: 'multi-select', options: ['Rännor', 'Hängrännor', 'Skorstensbeslag'] },
+      { id: 'insulation', label: 'Vad gäller isoleringen?', type: 'select', options: ['Behålla befintlig', 'Förbättra isoleringen'] },
+      { id: 'access', label: 'Hur ska taket nås under arbetet?', type: 'select', options: ['Ställning', 'Lift', 'Vet inte/osäker'] },
+      { id: 'solar', label: 'Är solceller aktuellt?', type: 'select', options: ['Förbereda för solceller', 'Installera solceller', 'Inte aktuellt'] }
     ]
   },
   {
@@ -110,14 +110,14 @@ const categories: CategoryConfig[] = [
     name: 'Kök',
     icon: <ChefHat className="w-6 h-6" />,
     fields: [
-      { id: 'layout', label: 'Planlösning', type: 'select', options: ['Behålla', 'Ändra'], required: true },
-      { id: 'cabinets', label: 'Stommar', type: 'select', options: ['Behålla', 'Byta'] },
-      { id: 'flooring', label: 'Golv', type: 'select', options: ['Behålla', 'Byta'] },
-      { id: 'walls', label: 'Väggar/tak', type: 'multi-select', options: ['Målning', 'Kakel', 'Gips'] },
-      { id: 'electrical', label: 'Elinstallationer', type: 'multi-select', options: ['Uttag', 'Belysning', 'Vitvaror'] },
-      { id: 'plumbing', label: 'VVS', type: 'multi-select', options: ['Diskbänk', 'Diskmaskin', 'Vattenflytt'] },
-      { id: 'ventilation', label: 'Ventilation/fläkt', type: 'select', options: ['Behålla', 'Byta'] },
-      { id: 'demolition', label: 'Rivning och bortforsling', type: 'select', options: ['Ja', 'Nej'] }
+      { id: 'layout', label: 'Vill du behålla eller ändra planlösningen?', type: 'select', options: ['Behålla befintlig planlösning', 'Ändra planlösningen'], required: true },
+      { id: 'cabinets', label: 'Vad gäller köksstommarna?', type: 'select', options: ['Behålla befintliga stommar', 'Byta till nya stommar'] },
+      { id: 'flooring', label: 'Vad gäller golvet?', type: 'select', options: ['Behålla befintligt golv', 'Byta golv'] },
+      { id: 'walls', label: 'Vilka vägg- och takarbeten behövs?', type: 'multi-select', options: ['Målning', 'Kakel', 'Gipsning'] },
+      { id: 'electrical', label: 'Vilka elinstallationer behövs?', type: 'multi-select', options: ['Nya uttag', 'Belysning', 'Anslutning för vitvaror'] },
+      { id: 'plumbing', label: 'Vilka VVS-arbeten behövs?', type: 'multi-select', options: ['Diskbänk', 'Diskmaskin', 'Flytta vattenledningar'] },
+      { id: 'ventilation', label: 'Vad gäller ventilation och fläkt?', type: 'select', options: ['Behålla befintlig', 'Byta till ny'] },
+      { id: 'demolition', label: 'Behövs rivning och bortforsling?', type: 'select', options: ['Ja', 'Nej'] }
     ]
   },
   {
@@ -125,14 +125,14 @@ const categories: CategoryConfig[] = [
     name: 'Badrum',
     icon: <Bath className="w-6 h-6" />,
     fields: [
-      { id: 'scope', label: 'Omfattning', type: 'select', options: ['Helrenovering', 'Delrenovering'], required: true },
-      { id: 'layout', label: 'Planlösning', type: 'select', options: ['Behålla', 'Ändra'] },
-      { id: 'problems', label: 'Befintliga problem', type: 'multi-select', options: ['Fukt', 'Stammar', 'Ventilation', 'Inga'] },
-      { id: 'drain', label: 'Golvbrunn', type: 'select', options: ['Behålla', 'Byta'] },
-      { id: 'waterproofing', label: 'Tätskikt', type: 'select', options: ['Nytt', 'Osäker'] },
-      { id: 'electrical', label: 'El', type: 'multi-select', options: ['Golvvärme', 'Belysning', 'Uttag'] },
-      { id: 'plumbing', label: 'VVS', type: 'multi-select', options: ['Rördragning', 'Blandare', 'Flytt toalett/dusch'] },
-      { id: 'certification', label: 'Intyg', type: 'select', options: ['BRF/försäkring', 'Ej aktuellt'] }
+      { id: 'scope', label: 'Vilken omfattning har badrumsprojektet?', type: 'select', options: ['Helrenovering', 'Delrenovering'], required: true },
+      { id: 'layout', label: 'Vill du behålla eller ändra planlösningen?', type: 'select', options: ['Behålla befintlig planlösning', 'Ändra planlösningen'] },
+      { id: 'problems', label: 'Finns det några befintliga problem?', type: 'multi-select', options: ['Fuktproblem', 'Problem med stammar', 'Ventilationsproblem', 'Inga kända problem'] },
+      { id: 'drain', label: 'Vad gäller golvbrunnen?', type: 'select', options: ['Behålla befintlig', 'Byta till ny'] },
+      { id: 'waterproofing', label: 'Behövs nytt tätskikt?', type: 'select', options: ['Ja, nytt tätskikt', 'Vet inte/osäker'] },
+      { id: 'electrical', label: 'Vilka elinstallationer behövs?', type: 'multi-select', options: ['Golvvärme', 'Belysning', 'Uttag'] },
+      { id: 'plumbing', label: 'Vilka VVS-arbeten behövs?', type: 'multi-select', options: ['Ny rördragning', 'Blandare', 'Flytta toalett eller dusch'] },
+      { id: 'certification', label: 'Behövs intyg för BRF eller försäkring?', type: 'select', options: ['Ja, för BRF/försäkring', 'Nej, inte aktuellt'] }
     ]
   },
   {
@@ -140,13 +140,13 @@ const categories: CategoryConfig[] = [
     name: 'Altan/Uterum',
     icon: <Sun className="w-6 h-6" />,
     fields: [
-      { id: 'type', label: 'Typ', type: 'select', options: ['Altan', 'Uterum', 'Terrass', 'Balkong'], required: true },
-      { id: 'size', label: 'Storlek (m²)', type: 'number', required: true },
-      { id: 'design', label: 'Utformning', type: 'select', options: ['Öppen', 'Inglasad', 'Med tak'] },
-      { id: 'flooring', label: 'Golvmaterial', type: 'select', options: ['Trä', 'Komposit', 'Sten', 'Osäker'] },
-      { id: 'foundation', label: 'Grundläggning/stolpar', type: 'select', options: ['Ja', 'Nej', 'Osäker'] },
-      { id: 'railings', label: 'Räcken/trappor', type: 'select', options: ['Inkludera', 'Ej aktuellt'] },
-      { id: 'electrical', label: 'El/belysning', type: 'select', options: ['Ja', 'Nej'] }
+      { id: 'type', label: 'Vilken typ av konstruktion planerar du?', type: 'select', options: ['Altan', 'Uterum', 'Terrass', 'Balkong'], required: true },
+      { id: 'size', label: 'Hur stor ska konstruktionen vara? (ange storlek i m²)', type: 'number', required: true },
+      { id: 'design', label: 'Hur ska konstruktionen utformas?', type: 'select', options: ['Öppen konstruktion', 'Inglasad', 'Med tak'] },
+      { id: 'flooring', label: 'Vilket golvmaterial föredrar du?', type: 'select', options: ['Trä', 'Komposit', 'Sten', 'Vet inte/osäker'] },
+      { id: 'foundation', label: 'Behövs grundläggning eller stolpar?', type: 'select', options: ['Ja', 'Nej', 'Osäker'] },
+      { id: 'railings', label: 'Ska räcken och trappor ingå?', type: 'select', options: ['Ja, inkludera', 'Nej, inte aktuellt'] },
+      { id: 'electrical', label: 'Behövs el och belysning?', type: 'select', options: ['Ja', 'Nej'] }
     ]
   },
   {
@@ -154,12 +154,12 @@ const categories: CategoryConfig[] = [
     name: 'Finsnickeri',
     icon: <Palette className="w-6 h-6" />,
     fields: [
-      { id: 'type', label: 'Typ', type: 'select', options: ['Trappa', 'Platsbyggd möbel', 'Garderob', 'Panelvägg', 'Annat'], required: true },
-      { id: 'drawings', label: 'Ritning/skiss', type: 'select', options: ['Finns', 'Behövs hjälp'] },
-      { id: 'material', label: 'Material', type: 'select', options: ['Träslag', 'Lack', 'Färg', 'Osäker'] },
-      { id: 'measurements', label: 'Mått/utrymme', type: 'text' },
-      { id: 'electrical', label: 'El/belysning', type: 'select', options: ['Ja', 'Nej'] },
-      { id: 'installation', label: 'Montage', type: 'select', options: ['På plats', 'Endast leverans'] }
+      { id: 'type', label: 'Vilken typ av finsnickeri handlar det om?', type: 'select', options: ['Trappa', 'Platsbyggd möbel', 'Garderob', 'Panelvägg', 'Annat'], required: true },
+      { id: 'drawings', label: 'Finns det ritning eller skiss?', type: 'select', options: ['Ja, ritning finns', 'Nej, behöver hjälp'] },
+      { id: 'material', label: 'Vilka material föredrar du?', type: 'select', options: ['Specifikt träslag', 'Lack', 'Färg', 'Vet inte/osäker'] },
+      { id: 'measurements', label: 'Beskriv mått och utrymme för projektet', type: 'text' },
+      { id: 'electrical', label: 'Behövs el och belysning?', type: 'select', options: ['Ja', 'Nej'] },
+      { id: 'installation', label: 'Hur ska montaget ske?', type: 'select', options: ['Montage på plats', 'Endast leverans'] }
     ]
   },
   {
