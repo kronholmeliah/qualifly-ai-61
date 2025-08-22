@@ -22,7 +22,9 @@ import {
   MessageCircle,
   Bot,
   Send,
-  User
+  User,
+  Video,
+  Sparkles
 } from 'lucide-react';
 
 // Types
@@ -298,7 +300,7 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
       setTimeout(() => {
         setIsTyping(false);
         addMessage('ai', question.question);
-      }, 1500); // Longer delay to simulate AI "thinking"
+      }, 1800); // Optimized timing for demo recording
     }
   };
 
@@ -313,9 +315,9 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
     updateDynamicField(question.id, answer);
     setCurrentAnswer('');
     
-    // AI acknowledges and moves to next question
+    // AI acknowledges and moves to next question - optimized for demo
     setTimeout(() => {
-      const responses = ['Tack!', 'Bra!', 'Okej!', 'Perfekt!', 'Bra att veta!'];
+      const responses = ['Perfekt! 👍', 'Bra att veta! ✨', 'Tack så mycket! 🙌', 'Utmärkt! 👌', 'Det hjälper oss mycket! 💡'];
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
       addMessage('ai', randomResponse);
       
@@ -323,24 +325,24 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
         if (currentQuestionIndex < currentCategoryQuestions.length - 1) {
           setCurrentQuestionIndex(prev => {
             const newIndex = prev + 1;
-            // Ask next question after state update
+            // Ask next question after state update - smoother timing for demo
             setTimeout(() => {
               askCurrentQuestion();
-            }, 800);
+            }, 1000);
             return newIndex;
           });
         } else {
           // Conversation completed
           setTimeout(() => {
-            addMessage('ai', 'Perfekt! Nu har jag all information jag behöver. Låt mig sammanfatta ditt projekt...');
+            addMessage('ai', 'Fantastiskt! Nu har jag all information jag behöver. Låt mig sammanfatta ditt projekt... 📋✨');
             setTimeout(() => {
               setIsInConversation(false);
               setCurrentStep(3);
-            }, 2500);
-          }, 1000);
+            }, 2800);
+          }, 1200);
         }
-      }, 1000);
-    }, 800);
+      }, 1200);
+    }, 1000);
   };
 
   const handleQuickAnswer = (answer: string) => {
