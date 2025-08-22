@@ -2,6 +2,8 @@ import React from "react";
 import { EnhancedLeadChatWidget } from "@/components/EnhancedLeadChatWidget";
 import { Lead } from "@/types/lead";
 import { calculateLeadScore } from "@/utils/leadScoring";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const CustomerLanding = () => {
   const handleLeadSubmitted = (data: { lead: any }) => {
@@ -60,12 +62,21 @@ const CustomerLanding = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-5xl font-bold text-foreground mb-6">
-            Få en kostnadskalkyl för ditt projekt
+            Få din byggoffert på några minuter
           </h1>
-          <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
-            Berätta om ditt renoveringsprojekt och få en direkt uppskattning av kostnaden. 
-            Våra experter kommer att kontakta dig med ett skräddarsytt förslag.
+          <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+            Beskriv ditt projekt så får du en skräddarsydd offert från våra erfarna byggare
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Link to="/intake">
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-4">
+                Starta här - Få offert
+              </Button>
+            </Link>
+            <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/10 text-lg px-8 py-4">
+              Prata med oss direkt
+            </Button>
+          </div>
           
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             <div className="p-6 rounded-lg bg-card border">
