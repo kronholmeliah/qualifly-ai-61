@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,7 +20,9 @@ import {
   ArrowRight,
   ArrowLeft,
   MessageCircle,
-  Bot
+  Bot,
+  Send,
+  User
 } from 'lucide-react';
 
 // Types
@@ -180,10 +182,23 @@ interface IntakeFormProps {
   onSubmit: (data: FormData) => void;
 }
 
+// Chat message interface
+interface ChatMessage {
+  id: string;
+  type: 'ai' | 'user';
+  content: string;
+  timestamp: Date;
+}
+
 const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isInConversation, setIsInConversation] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [currentAnswer, setCurrentAnswer] = useState('');
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
@@ -202,8 +217,13 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
   const currentQuestion = currentCategoryQuestions[currentQuestionIndex];
   
   const progress = isInConversation 
-    ? 50 + ((currentQuestionIndex + 1) / (currentCategoryQuestions.length || 1)) * 25
-    : ((currentStep + 1) / totalSteps) * 100;
+    ? 50 + ((currentQuestionIndex + 1) / (currentCategoryQuestions.length || 1)) * 40
+    : ((currentStep + 1) / totalSteps) * 50;
+
+  // Scroll to bottom when new messages are added
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages, isTyping]);
 
   const updateFormData = (field: string, value: any) => {
     setFormData(prev => ({
@@ -238,30 +258,84 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
     }
   };
 
+  const addMessage = (type: 'ai' | 'user', content: string) => {
+    const newMessage: ChatMessage = {
+      id: Date.now().toString(),
+      type,
+      content,
+      timestamp: new Date()
+    };
+    setChatMessages(prev => [...prev, newMessage]);
+  };
+
   const handleStartConversation = () => {
     if (currentCategoryQuestions.length > 0) {
       setIsInConversation(true);
-      setCurrentQuestionIndex(0);
+      setCurrentStep(2);
+      
+      // Add initial AI greeting
+      setTimeout(() => {
+        const categoryName = categories.find(c => c.id === formData.category)?.name || 'projekt';
+        addMessage('ai', `Hej ${formData.name}! Nu ska vi prata lite mer om ditt ${categoryName.toLowerCase()}-projekt. Jag kommer att ställa några frågor för att bättre förstå vad du behöver.`);
+        
+        // Ask first question after a delay
+        setTimeout(() => {
+          askCurrentQuestion();
+        }, 1500);
+      }, 500);
     } else {
       setCurrentStep(3); // Skip to summary if no questions
     }
   };
 
-  const handleAnswerQuestion = (answer: any) => {
+  const askCurrentQuestion = () => {
     if (currentQuestion) {
-      updateDynamicField(currentQuestion.id, answer);
+      setIsTyping(true);
       
-      // Auto-advance to next question
+      setTimeout(() => {
+        setIsTyping(false);
+        addMessage('ai', currentQuestion.question);
+      }, 1000); // Simulate AI "thinking"
+    }
+  };
+
+  const handleAnswerSubmit = (answer: string) => {
+    if (!answer.trim()) return;
+    
+    // Add user's answer to chat
+    addMessage('user', answer);
+    updateDynamicField(currentQuestion.id, answer);
+    setCurrentAnswer('');
+    
+    // AI acknowledges and moves to next question
+    setTimeout(() => {
+      const responses = ['Tack!', 'Bra!', 'Okej!', 'Perfekt!'];
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      addMessage('ai', randomResponse);
+      
       setTimeout(() => {
         if (currentQuestionIndex < currentCategoryQuestions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1);
+          
+          setTimeout(() => {
+            askCurrentQuestion();
+          }, 500);
         } else {
           // Conversation completed
-          setIsInConversation(false);
-          setCurrentStep(3);
+          setTimeout(() => {
+            addMessage('ai', 'Perfekt! Låt mig sammanfatta ditt projekt...');
+            setTimeout(() => {
+              setIsInConversation(false);
+              setCurrentStep(3);
+            }, 2000);
+          }, 500);
         }
-      }, 500);
-    }
+      }, 800);
+    }, 500);
+  };
+
+  const handleQuickAnswer = (answer: string) => {
+    handleAnswerSubmit(answer);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -417,133 +491,109 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
     </div>
   );
 
-  const renderConversationStart = () => (
-    <div className="text-center space-y-6">
-      <div className="w-20 h-20 mx-auto bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-        <MessageCircle className="w-10 h-10 text-primary-foreground" />
+  const renderTypingIndicator = () => (
+    <div className="flex items-start gap-3 mb-4">
+      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+        <Bot className="w-4 h-4 text-primary-foreground" />
       </div>
-      <div>
-        <h2 className="text-2xl font-bold text-foreground mb-4">Perfekt! Nu har jag några följdfrågor</h2>
-        <p className="text-lg text-muted-foreground mb-6">
-          För att kunna ge dig den bästa offerten kommer jag ställa några frågor om ditt {categories.find(c => c.id === formData.category)?.name.toLowerCase()}-projekt.
-        </p>
-        <p className="text-muted-foreground mb-8">
-          Det tar bara några minuter och hjälper oss att förstå exactly vad du behöver.
-        </p>
-        <Button onClick={handleStartConversation} size="lg" className="gap-2">
-          <Bot className="w-5 h-5" />
-          Starta konversation
-        </Button>
+      <div className="bg-muted rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+        <div className="flex space-x-1">
+          <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+          <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+          <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        </div>
       </div>
     </div>
   );
 
-  const renderConversation = () => {
-    if (!currentQuestion) return null;
+  const renderChatMessage = (message: ChatMessage) => (
+    <div key={message.id} className={`flex items-start gap-3 mb-4 ${message.type === 'user' ? 'flex-row-reverse' : ''}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+        message.type === 'user' 
+          ? 'bg-secondary' 
+          : 'bg-primary'
+      }`}>
+        {message.type === 'user' ? (
+          <User className="w-4 h-4 text-secondary-foreground" />
+        ) : (
+          <Bot className="w-4 h-4 text-primary-foreground" />
+        )}
+      </div>
+      <div className={`rounded-2xl px-4 py-3 max-w-sm ${
+        message.type === 'user'
+          ? 'bg-secondary text-secondary-foreground rounded-tr-sm'
+          : 'bg-muted rounded-tl-sm'
+      }`}>
+        <p className="text-sm">{message.content}</p>
+      </div>
+    </div>
+  );
 
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-            <Bot className="w-6 h-6 text-primary-foreground" />
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-foreground">Aidrin AI</h3>
-            <p className="text-sm text-muted-foreground">
-              Fråga {currentQuestionIndex + 1} av {currentCategoryQuestions.length}
-            </p>
-          </div>
-        </div>
+  const renderConversationStep = () => (
+    <div className="space-y-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-foreground mb-2">AI-assistent</h2>
+        <p className="text-muted-foreground">Svara på frågorna för att få en skräddarsydd offert</p>
+      </div>
 
-        <Card className="border-l-4 border-l-primary">
-          <CardContent className="pt-6">
-            <p className="text-lg text-foreground mb-6">{currentQuestion.question}</p>
-
-            {currentQuestion.type === 'select' && (
-              <div className="grid gap-3">
-                {currentQuestion.options?.map((option) => (
+      {/* Chat Container */}
+      <Card className="h-96 flex flex-col">
+        <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+          {chatMessages.map(renderChatMessage)}
+          {isTyping && renderTypingIndicator()}
+          <div ref={chatEndRef} />
+        </CardContent>
+        
+        {/* Input Area */}
+        {currentQuestion && !isTyping && (
+          <div className="border-t p-4 space-y-3">
+            {/* Quick answer buttons for select type questions */}
+            {currentQuestion.type === 'select' && currentQuestion.options && (
+              <div className="flex flex-wrap gap-2">
+                {currentQuestion.options.map((option) => (
                   <Button
                     key={option}
                     variant="outline"
-                    onClick={() => handleAnswerQuestion(option)}
-                    className="justify-start text-left h-auto p-4 hover:bg-primary/5"
+                    size="sm"
+                    onClick={() => handleQuickAnswer(option)}
+                    className="text-xs"
                   >
                     {option}
                   </Button>
                 ))}
               </div>
             )}
+            
+            {/* Text input for text/number type or custom answers */}
+            <div className="flex gap-2">
+              <Input
+                value={currentAnswer}
+                onChange={(e) => setCurrentAnswer(e.target.value)}
+                placeholder="Skriv ditt svar..."
+                onKeyPress={(e) => e.key === 'Enter' && handleAnswerSubmit(currentAnswer)}
+                className="flex-1"
+              />
+              <Button 
+                size="icon"
+                onClick={() => handleAnswerSubmit(currentAnswer)}
+                disabled={!currentAnswer.trim()}
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </Card>
 
-            {currentQuestion.type === 'multi-select' && (
-              <div className="grid gap-3">
-                {currentQuestion.options?.map((option) => {
-                  const currentValues = formData.dynamicFields[currentQuestion.id] || [];
-                  const isSelected = currentValues.includes(option);
-                  
-                  return (
-                    <Button
-                      key={option}
-                      variant={isSelected ? "default" : "outline"}
-                      onClick={() => {
-                        const newValues = isSelected 
-                          ? currentValues.filter((v: string) => v !== option)
-                          : [...currentValues, option];
-                        updateDynamicField(currentQuestion.id, newValues);
-                      }}
-                      className="justify-start text-left h-auto p-4"
-                    >
-                      {option}
-                    </Button>
-                  );
-                })}
-                <Button 
-                  onClick={() => handleAnswerQuestion(formData.dynamicFields[currentQuestion.id] || [])}
-                  className="mt-4"
-                  disabled={!formData.dynamicFields[currentQuestion.id]?.length}
-                >
-                  Fortsätt
-                </Button>
-              </div>
-            )}
-
-            {currentQuestion.type === 'text' && (
-              <div className="space-y-4">
-                <Textarea
-                  value={formData.dynamicFields[currentQuestion.id] || ''}
-                  onChange={(e) => updateDynamicField(currentQuestion.id, e.target.value)}
-                  placeholder="Skriv ditt svar här..."
-                  rows={3}
-                />
-                <Button 
-                  onClick={() => handleAnswerQuestion(formData.dynamicFields[currentQuestion.id])}
-                  disabled={!formData.dynamicFields[currentQuestion.id]?.trim()}
-                >
-                  Fortsätt
-                </Button>
-              </div>
-            )}
-
-            {currentQuestion.type === 'number' && (
-              <div className="space-y-4">
-                <Input
-                  type="number"
-                  value={formData.dynamicFields[currentQuestion.id] || ''}
-                  onChange={(e) => updateDynamicField(currentQuestion.id, e.target.value)}
-                  placeholder="Ange siffra..."
-                />
-                <Button 
-                  onClick={() => handleAnswerQuestion(formData.dynamicFields[currentQuestion.id])}
-                  disabled={!formData.dynamicFields[currentQuestion.id]}
-                >
-                  Fortsätt
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    );
-  };
+      {chatMessages.length > 0 && (
+        <div className="text-center">
+          <p className="text-sm text-muted-foreground">
+            Fråga {Math.min(currentQuestionIndex + 1, currentCategoryQuestions.length)} av {currentCategoryQuestions.length}
+          </p>
+        </div>
+      )}
+    </div>
+  );
 
   const renderFinalStep = () => {
     const selectedCategory = categories.find(cat => cat.id === formData.category);
@@ -672,8 +722,7 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
             <CardContent className="p-8">
               {currentStep === 0 && renderWelcomeStep()}
               {currentStep === 1 && renderGeneralInfo()}
-              {currentStep === 2 && !isInConversation && renderConversationStart()}
-              {currentStep === 2 && isInConversation && renderConversation()}
+              {(currentStep === 2 || isInConversation) && renderConversationStep()}
               {currentStep === 3 && renderFinalStep()}
             </CardContent>
           </Card>
@@ -694,8 +743,8 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
             {!isInConversation && currentStep < totalSteps - 1 && currentStep !== 2 && (
               <Button
                 onClick={() => {
-                  if (currentStep === 1) {
-                    setCurrentStep(2);
+                  if (currentStep === 1 && canProceed()) {
+                    handleStartConversation();
                   } else {
                     setCurrentStep(prev => prev + 1);
                   }
@@ -703,8 +752,8 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
                 disabled={!canProceed()}
                 className="gap-2"
               >
-                Nästa
-                <ArrowRight className="w-4 h-4" />
+                {currentStep === 1 ? 'Starta konversation' : 'Nästa'}
+                {currentStep === 1 ? <MessageCircle className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
               </Button>
             )}
 
