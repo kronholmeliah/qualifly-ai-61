@@ -272,6 +272,8 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
     if (currentCategoryQuestions.length > 0) {
       setIsInConversation(true);
       setCurrentStep(2);
+      setCurrentQuestionIndex(0);
+      setChatMessages([]); // Clear any existing messages
       
       // Add initial AI greeting
       setTimeout(() => {
@@ -281,7 +283,7 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
         // Ask first question after a delay
         setTimeout(() => {
           askCurrentQuestion();
-        }, 1500);
+        }, 2000);
       }, 500);
     } else {
       setCurrentStep(3); // Skip to summary if no questions
@@ -289,49 +291,56 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
   };
 
   const askCurrentQuestion = () => {
-    if (currentQuestion) {
+    const question = currentCategoryQuestions[currentQuestionIndex];
+    if (question) {
       setIsTyping(true);
       
       setTimeout(() => {
         setIsTyping(false);
-        addMessage('ai', currentQuestion.question);
-      }, 1000); // Simulate AI "thinking"
+        addMessage('ai', question.question);
+      }, 1500); // Longer delay to simulate AI "thinking"
     }
   };
 
   const handleAnswerSubmit = (answer: string) => {
     if (!answer.trim()) return;
     
+    const question = currentCategoryQuestions[currentQuestionIndex];
+    if (!question) return;
+    
     // Add user's answer to chat
     addMessage('user', answer);
-    updateDynamicField(currentQuestion.id, answer);
+    updateDynamicField(question.id, answer);
     setCurrentAnswer('');
     
     // AI acknowledges and moves to next question
     setTimeout(() => {
-      const responses = ['Tack!', 'Bra!', 'Okej!', 'Perfekt!'];
+      const responses = ['Tack!', 'Bra!', 'Okej!', 'Perfekt!', 'Bra att veta!'];
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
       addMessage('ai', randomResponse);
       
       setTimeout(() => {
         if (currentQuestionIndex < currentCategoryQuestions.length - 1) {
-          setCurrentQuestionIndex(prev => prev + 1);
-          
-          setTimeout(() => {
-            askCurrentQuestion();
-          }, 500);
+          setCurrentQuestionIndex(prev => {
+            const newIndex = prev + 1;
+            // Ask next question after state update
+            setTimeout(() => {
+              askCurrentQuestion();
+            }, 800);
+            return newIndex;
+          });
         } else {
           // Conversation completed
           setTimeout(() => {
-            addMessage('ai', 'Perfekt! Låt mig sammanfatta ditt projekt...');
+            addMessage('ai', 'Perfekt! Nu har jag all information jag behöver. Låt mig sammanfatta ditt projekt...');
             setTimeout(() => {
               setIsInConversation(false);
               setCurrentStep(3);
-            }, 2000);
-          }, 500);
+            }, 2500);
+          }, 1000);
         }
-      }, 800);
-    }, 500);
+      }, 1000);
+    }, 800);
   };
 
   const handleQuickAnswer = (answer: string) => {
@@ -544,13 +553,13 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ onSubmit }) => {
           <div ref={chatEndRef} />
         </CardContent>
         
-        {/* Input Area */}
-        {currentQuestion && !isTyping && (
+        {/* Input Area - only show when there's a current question and AI isn't typing */}
+        {currentCategoryQuestions[currentQuestionIndex] && !isTyping && chatMessages.length > 1 && (
           <div className="border-t p-4 space-y-3">
             {/* Quick answer buttons for select type questions */}
-            {currentQuestion.type === 'select' && currentQuestion.options && (
+            {currentCategoryQuestions[currentQuestionIndex].type === 'select' && currentCategoryQuestions[currentQuestionIndex].options && (
               <div className="flex flex-wrap gap-2">
-                {currentQuestion.options.map((option) => (
+                {currentCategoryQuestions[currentQuestionIndex].options?.map((option) => (
                   <Button
                     key={option}
                     variant="outline"
