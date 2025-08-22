@@ -243,6 +243,38 @@ const BuildingCompany = () => {
         </div>
       </section>
 
+      {/* AI Chat Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <Badge variant="outline" className="mb-4">
+              <Users className="w-3 h-3 mr-1" />
+              AI-assistent
+            </Badge>
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">
+              Prata med vår AI-assistent
+            </h3>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Få svar på dina frågor direkt! Vår AI kan hjälpa dig med information 
+              om våra tjänster, priser och bokningar.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <Card className="border-border/50 shadow-elegant bg-card">
+              <CardContent className="p-8">
+                <div 
+                  id="voiceflow-chat" 
+                  className="min-h-[500px] w-full rounded-lg bg-background/50"
+                >
+                  {/* Voiceflow widget will be embedded here */}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto">
@@ -309,10 +341,6 @@ const BuildingCompany = () => {
         </div>
       </footer>
 
-      {/* Voiceflow Chat Widget Container */}
-      <div id="voiceflow-chat" className="fixed bottom-4 right-4 z-50">
-        {/* Voiceflow widget will be embedded here */}
-      </div>
     </div>
   );
 };
