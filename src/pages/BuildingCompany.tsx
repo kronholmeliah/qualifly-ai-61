@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,7 +17,50 @@ import {
   Paintbrush
 } from 'lucide-react';
 
+// Declare global Voiceflow types
+declare global {
+  interface Window {
+    voiceflow?: {
+      chat: {
+        load: (config: any) => void;
+      };
+    };
+  }
+}
+
 const BuildingCompany = () => {
+  useEffect(() => {
+    // Load Voiceflow chat widget
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.onload = function() {
+      if (window.voiceflow) {
+        window.voiceflow.chat.load({
+          verify: { projectID: '68a89a73618fdb717f47cb84' },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production',
+          voice: {
+            url: "https://runtime-api.voiceflow.com"
+          },
+          render: {
+            mode: 'embedded',
+            target: document.getElementById('voiceflow-chat')
+          }
+        });
+      }
+    };
+    script.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+    
+    // Add script to head
+    document.head.appendChild(script);
+    
+    // Cleanup function
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
   const services = [
     {
       icon: <Home className="w-6 h-6" />,
