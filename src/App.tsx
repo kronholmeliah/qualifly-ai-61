@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
+import ModernDashboard from "./pages/ModernDashboard";
 import LeadDetail from "./pages/LeadDetail";
 import IntakePage from "./pages/IntakePage";
 import BuildingCompany from "./pages/BuildingCompany";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/company" element={<BuildingCompany />} />
           <Route path="/traditional-form" element={<TraditionalFormPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/modern-dashboard" element={<ModernDashboard />} />
           <Route path="/admin/lead/:id" element={<LeadDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
