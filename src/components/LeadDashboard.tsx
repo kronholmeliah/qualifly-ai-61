@@ -36,9 +36,10 @@ export const LeadDashboard: React.FC<LeadDashboardProps> = ({ leads, onUpdateLea
   const filteredAndSortedLeads = leads
     .filter((lead) => {
       const matchesSearch = 
-        lead.serviceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.scope.toLowerCase().includes(searchTerm.toLowerCase());
+        (lead.serviceType || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (lead.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (lead.scope || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (lead.customerName || '').toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesStatus = statusFilter === "all" || lead.status === statusFilter;
       
