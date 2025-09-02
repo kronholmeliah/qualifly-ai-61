@@ -257,15 +257,15 @@ const LeadDetail = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">Uppskattad kostnad</span>
-                    <span className="text-sm font-medium">{lead.estimatedCost.toLocaleString("sv-SE")} kr</span>
+                    <span className="text-sm font-medium">{(lead.estimatedCost || 0).toLocaleString("sv-SE")} kr</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">Marginal</span>
-                    <span className="text-sm font-medium">{lead.margin}%</span>
+                    <span className="text-sm font-medium">{lead.margin || 0}%</span>
                   </div>
                   <div className="flex justify-between font-medium">
                     <span className="text-sm">Rekommenderat pris</span>
-                    <span className="text-sm text-primary">{lead.finalPrice.toLocaleString("sv-SE")} kr</span>
+                    <span className="text-sm text-primary">{(lead.finalPrice || 0).toLocaleString("sv-SE")} kr</span>
                   </div>
                 </div>
               </CardContent>
