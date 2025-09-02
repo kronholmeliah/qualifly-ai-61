@@ -67,12 +67,12 @@ const TraditionalIntakeForm: React.FC<TraditionalIntakeFormProps> = ({
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: 'Anna Svensson',
+      name: 'Mats Svensson',
       phone: '070-123 45 67',
-      email: 'anna.svensson@gmail.com',
-      address: 'Tallvägen 14, 214 23 Malmö',
+      email: 'mats.svensson@email.com',
+      address: 'Björkvägen 7',
       services: ['badrum'],
-      description: 'Jag vill renovera mitt badrum, byta kakel och klinker, sätta in ny toalett och duschhörna samt gärna få in golvvärme. Rummet är ca 7 m².'
+      description: 'Vill ta bort badkaret och sätta in duschväggar istället. Behöver även flytta handfatet närmare dörren.'
     }
   });
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

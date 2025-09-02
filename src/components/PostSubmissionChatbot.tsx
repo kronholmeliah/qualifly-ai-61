@@ -24,11 +24,11 @@ interface PostSubmissionChatbotProps {
 }
 
 const AI_QUESTIONS = [
-  "Tack Anna 🙌 Jag har tagit emot din beskrivning om badrummet på Tallvägen 14. Jag ställer några korta frågor så vi kan förtydliga detaljerna.",
-  "Du nämnde att du vill sätta in en ny toalett och duschhörna. Vill du behålla samma placering, eller behöver de flyttas?",
-  "Bra att veta 👍 När det gäller golvvärme – vill du ha elgolvvärme eller vattenburen golvvärme?",
-  "Perfekt. Vet du om golvbrunnen är gammal och behöver bytas ut i samband med renoveringen?",
-  "Tack 🙌 och en sista sag: har du märkt några fuktproblem eller tidigare vattenskador i badrummet?"
+  "Hej Mats, tack för din förfrågan om badrumsrenovering på Björkvägen 7. Jag ser att du vill ta bort badkaret och sätta in duschväggar – stämmer det?",
+  "Förstår. Vill du behålla toaletten och handfatet på samma plats, eller ska de flyttas?",
+  "Noterat. När det gäller ventilationen – vill du ha en ny fläkt installerad, eller är det förbättring av befintlig du tänker på?",
+  "Bra. Och hur är det med golvvärme – vill du lägga in det i samband med renoveringen?",
+  "Perfekt. Vet du om golvbrunnen behöver bytas, eller är den relativt ny?"
 ];
 
 const PostSubmissionChatbot: React.FC<PostSubmissionChatbotProps> = ({ customerData }) => {
@@ -87,15 +87,14 @@ const PostSubmissionChatbot: React.FC<PostSubmissionChatbotProps> = ({ customerD
       setTimeout(() => {
         const summaryMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: `Perfekt! Nu har jag en bra bild av ditt badrumsprojekt. Sammanfattning:
-          
+          text: `Tack för all information. Vi återkommer till dig inom 24 timmar för att bekräfta projektet och föreslå en tid för platsbesiktning.
+
 📍 Adress: ${customerData.address || 'Ej angivet'}
-🏠 Rum: Badrum (ca 7 m²)
-🚿 Dusch flyttas till andra sidan
-🚽 Toalett behålls på nuvarande plats
+🛁 Ta bort badkar, installera duschväggar
+🚽 Toalett behålls, handfat flyttas närmare dörren
+💨 Ny ventilationsfläkt (gammal fungerar dåligt)
 ⚡ Elgolvvärme
-🔧 Ny golvbrunn
-✅ Inga kända fuktproblem
+🔧 Ny golvbrunn (gammal från husets byggnad)
 
 Vill du att vi bokar en kostnadsfri platsbesök för en exakt offert, eller ska vi skicka en preliminär offert baserat på dessa uppgifter?`,
           sender: 'ai',
