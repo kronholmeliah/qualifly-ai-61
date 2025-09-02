@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import PostSubmissionChatbot from './PostSubmissionChatbot';
 
 // Form validation schema
 const formSchema = z.object({
@@ -58,18 +59,20 @@ const TraditionalIntakeForm: React.FC<TraditionalIntakeFormProps> = ({
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [submittedData, setSubmittedData] = useState<FormData | null>(null);
   const {
     toast
   } = useToast();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      phone: '',
-      email: '',
-      address: '',
-      services: [],
-      description: ''
+      name: 'Anna Svensson',
+      phone: '070-123 45 67',
+      email: 'anna.svensson@gmail.com',
+      address: 'Tallvägen 14, 214 23 Malmö',
+      services: ['badrum'],
+      description: 'Jag vill renovera mitt badrum, byta kakel och klinker, sätta in ny toalett och duschhörna samt gärna få in golvvärme. Rummet är ca 7 m².'
     }
   });
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,10 +123,11 @@ const TraditionalIntakeForm: React.FC<TraditionalIntakeFormProps> = ({
           files
         });
       }
-      setIsSubmitted(true);
+      setSubmittedData(data);
+      setShowChatbot(true);
       toast({
         title: "Förfrågan skickad!",
-        description: "Vi kommer att kontakta dig inom 24 timmar."
+        description: "Fortsätt med vår AI-assistent för en mer detaljerad offert."
       });
     } catch (error) {
       toast({
@@ -135,27 +139,8 @@ const TraditionalIntakeForm: React.FC<TraditionalIntakeFormProps> = ({
       setIsSubmitting(false);
     }
   };
-  if (isSubmitted) {
-    return <div className="min-h-screen bg-gradient-to-br from-background via-surface to-muted/50 py-12 px-4">
-        <div className="container mx-auto max-w-2xl">
-          <Card className="border-border/50 shadow-lg">
-            <CardContent className="p-12 text-center">
-              <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-success/20 to-success/10 rounded-full flex items-center justify-center">
-                <CheckCircle className="w-10 h-10 text-success" />
-              </div>
-              <h1 className="text-3xl font-bold text-foreground mb-4">
-                Tack för din förfrågan!
-              </h1>
-              <p className="text-lg text-muted-foreground mb-6">
-                Vi har mottagit din offertförfrågan och kommer att kontakta dig inom 24 timmar.
-              </p>
-              <p className="text-muted-foreground">
-                Du kan förvänta dig att höra från oss snart med en personlig offert.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>;
+  if (showChatbot && submittedData) {
+    return <PostSubmissionChatbot customerData={submittedData} />;
   }
   return <div className="min-h-screen bg-gradient-to-br from-background via-surface to-muted/50 py-12 px-4">
       <div className="container mx-auto max-w-4xl">
