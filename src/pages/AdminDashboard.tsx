@@ -208,7 +208,7 @@ const AdminDashboard = () => {
           customerName: "Mats Svensson",
           customerContact: "mats.svensson@email.com",
           customerAddress: "Björkvägen 7, Lerum",
-          detailedDescription: "Badrumsrenovering baserat på AI-chatkonversation",
+          detailedDescription: "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort det befintliga badkaret och istället sätta in duschväggar samt en ny kommod. Toaletten kan stå kvar på sin nuvarande plats, men handfatet ska flyttas närmare dörren. Ventilationen fungerar dåligt och Mats vill därför installera en ny fläkt. Han önskar även elgolvvärme i golvet och byte av den gamla golvbrunnen.",
           projectType: "Badrum",
           renovationType: "Renovering",
           hasCompletedChat: true,
