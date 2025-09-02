@@ -27,40 +27,25 @@ type FormData = z.infer<typeof formSchema>;
 // Available services
 const services = [{
   id: 'badrum',
-  label: 'Badrum/Våtrum'
+  label: 'Badrum'
 }, {
   id: 'kok',
   label: 'Kök'
 }, {
-  id: 'tak',
-  label: 'Tak'
+  id: 'tak-fasad',
+  label: 'Tak & fasad'
 }, {
-  id: 'tillagg',
-  label: 'Tillägg/Tillbyggnad'
+  id: 'fonster-dorrar',
+  label: 'Fönster & dörrar'
 }, {
-  id: 'altan',
-  label: 'Altan/Uterum'
+  id: 'altan-tillbyggnad',
+  label: 'Altan & tillbyggnad'
 }, {
-  id: 'malning',
-  label: 'Målning'
+  id: 'nybyggnation',
+  label: 'Nybyggnation'
 }, {
-  id: 'golv',
-  label: 'Golv'
-}, {
-  id: 'el',
-  label: 'El'
-}, {
-  id: 'vvs',
-  label: 'VVS'
-}, {
-  id: 'finsnickeri',
-  label: 'Finsnickeri'
-}, {
-  id: 'fonsterbyte',
-  label: 'Fönsterbyte'
-}, {
-  id: 'annat',
-  label: 'Annat'
+  id: 'ovrigt',
+  label: 'Övrigt'
 }];
 interface TraditionalIntakeFormProps {
   onSubmit?: (data: FormData & {
