@@ -77,7 +77,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onClick }) => {
             <span className="text-sm text-muted-foreground">Uppskattad kostnad:</span>
             <div className="flex items-center gap-1">
               <Euro className="h-3 w-3 text-muted-foreground" />
-              <span className="text-sm font-medium">{lead.estimatedCost.toLocaleString("sv-SE")} kr</span>
+              <span className="text-sm font-medium">{(lead.estimatedCost || 0).toLocaleString("sv-SE")} kr</span>
             </div>
           </div>
           
@@ -86,7 +86,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onClick }) => {
             <div className="flex items-center gap-1">
               <Euro className="h-3 w-3 text-primary" />
               <span className="text-sm font-semibold text-primary">
-                {lead.finalPrice.toLocaleString("sv-SE")} kr
+                {(lead.finalPrice || 0).toLocaleString("sv-SE")} kr
               </span>
             </div>
           </div>
