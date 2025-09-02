@@ -91,7 +91,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onClick }) => {
             </div>
           </div>
           
-          {lead.attachments.length > 0 && (
+          {(lead.attachments && lead.attachments.length > 0) && (
             <div className="flex items-center gap-2 pt-2">
               <FileText className="h-3 w-3 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">
