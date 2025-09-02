@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar, Euro, FileText, User } from "lucide-react";
+import { MapPin, Calendar, Euro, FileText, User, MessageSquare } from "lucide-react";
 import { Lead } from "@/types/lead";
 import { getScoreColor, getScoreEmoji } from "@/utils/leadScoring";
 import { cn } from "@/lib/utils";
@@ -38,6 +38,12 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onClick }) => {
               >
                 {scoreEmoji} {lead.score}
               </Badge>
+              {lead.hasCompletedChat && (
+                <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                  <MessageSquare className="h-3 w-3 mr-1" />
+                  AI Chat
+                </Badge>
+              )}
             </div>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">

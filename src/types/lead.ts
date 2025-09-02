@@ -19,6 +19,23 @@ export interface Lead {
   detailedDescription?: string;
   projectType?: string;
   renovationType?: string;
+  // AI Summary and Chat data
+  aiSummary?: string;
+  structuredSummary?: {
+    customer?: string;
+    project?: string;
+    building?: string;
+    hvac?: string;
+    electrical?: string;
+    ventilation?: string;
+  };
+  chatHistory?: Array<{
+    id: string;
+    text: string;
+    sender: 'ai' | 'user';
+    timestamp: Date;
+  }>;
+  hasCompletedChat?: boolean;
   technicalRequirements?: {
     electrical?: string;
     plumbing?: string;

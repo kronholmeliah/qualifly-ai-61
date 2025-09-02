@@ -21,7 +21,10 @@ import {
   Clock,
   AlertTriangle,
   Star,
-  Calculator
+  Calculator,
+  MessageSquare,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { Lead } from "@/types/lead";
 import { getScoreColor, getScoreEmoji, generateLeadSummary, calculateLeadScore } from "@/utils/leadScoring";
@@ -40,6 +43,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
   onUpdateLead,
 }) => {
   const [margin, setMargin] = useState(lead?.margin || 20);
+  const [showChatHistory, setShowChatHistory] = useState(false);
   
   if (!lead) return null;
 
@@ -259,17 +263,124 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
               </CardContent>
             </Card>
 
-            {/* Auto-generated Summary */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Sammanfattning</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm leading-relaxed bg-muted p-4 rounded-md">
-                  {summary}
-                </p>
-              </CardContent>
-            </Card>
+            {/* AI Summary */}
+            {lead.aiSummary && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    AI-genererad sammanfattning
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Löpande text</Label>
+                    <p className="text-sm leading-relaxed bg-muted p-4 rounded-md mt-1">
+                      {lead.aiSummary}
+                    </p>
+                  </div>
+                  
+                  {lead.structuredSummary && (
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Uppstolpat (bredare kategorier)</Label>
+                      <div className="bg-muted p-4 rounded-md mt-1 space-y-3 text-sm">
+                        {lead.structuredSummary.customer && (
+                          <div>
+                            <span className="font-medium">Kund:</span> {lead.structuredSummary.customer}
+                          </div>
+                        )}
+                        {lead.structuredSummary.project && (
+                          <div>
+                            <span className="font-medium">Projekt:</span> {lead.structuredSummary.project}
+                          </div>
+                        )}
+                        {lead.structuredSummary.building && (
+                          <div className="ml-4">
+                            <span className="font-medium">• Bygg:</span> {lead.structuredSummary.building}
+                          </div>
+                        )}
+                        {lead.structuredSummary.hvac && (
+                          <div className="ml-4">
+                            <span className="font-medium">• VVS:</span> {lead.structuredSummary.hvac}
+                          </div>
+                        )}
+                        {lead.structuredSummary.electrical && (
+                          <div className="ml-4">
+                            <span className="font-medium">• El:</span> {lead.structuredSummary.electrical}
+                          </div>
+                        )}
+                        {lead.structuredSummary.ventilation && (
+                          <div className="ml-4">
+                            <span className="font-medium">• Ventilation:</span> {lead.structuredSummary.ventilation}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Chat History */}
+            {lead.chatHistory && lead.chatHistory.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    Chat-historik ({lead.chatHistory.length} meddelanden)
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowChatHistory(!showChatHistory)}
+                      className="ml-auto"
+                    >
+                      {showChatHistory ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                {showChatHistory && (
+                  <CardContent>
+                    <div className="space-y-3 max-h-60 overflow-y-auto">
+                      {lead.chatHistory.map((message) => (
+                        <div
+                          key={message.id}
+                          className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div
+                            className={`max-w-[70%] p-3 rounded-lg text-sm ${
+                              message.sender === 'user'
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-muted'
+                            }`}
+                          >
+                            <p>{message.text}</p>
+                            <p className={`text-xs mt-1 ${
+                              message.sender === 'user' ? 'text-primary-foreground/80' : 'text-muted-foreground'
+                            }`}>
+                              {message.timestamp.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+            )}
+
+            {/* Auto-generated Summary (fallback) */}
+            {!lead.aiSummary && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Automatisk sammanfattning</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm leading-relaxed bg-muted p-4 rounded-md">
+                    {summary}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
 
             <div className="text-xs text-muted-foreground">
               Skapad: {lead.createdAt.toLocaleDateString("sv-SE")} {lead.createdAt.toLocaleTimeString("sv-SE")}

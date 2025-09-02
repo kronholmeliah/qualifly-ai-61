@@ -189,6 +189,122 @@ const AdminDashboard = () => {
           }
         },
         {
+          id: "lead-mats",
+          serviceType: "Badrumsrenovering",
+          scope: "Ta bort badkar, installera duschväggar",
+          location: "Lerum",
+          timeframe: "Inom 2 veckor",
+          notes: "Chat genomförd med AI-assistent",
+          attachments: [],
+          estimatedCost: 120000,
+          score: 78,
+          margin: 25,
+          finalPrice: 150000,
+          createdAt: new Date("2024-01-19"),
+          status: "new",
+          customerName: "Mats Svensson",
+          customerContact: "mats.svensson@email.com",
+          customerAddress: "Björkvägen 7, Lerum",
+          detailedDescription: "Badrumsrenovering baserat på AI-chatkonversation",
+          projectType: "Badrum",
+          renovationType: "Renovering",
+          hasCompletedChat: true,
+          aiSummary: "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort badkaret och ersätta det med duschväggar samt en ny kommod. Toaletten behålls på samma plats, men handfatet ska flyttas närmare dörren. Ventilationen ska förbättras genom installation av en ny fläkt. Han önskar elgolvvärme i golvet och byte av den gamla golvbrunnen.",
+          structuredSummary: {
+            customer: "Mats Nilsson, Björkvägen 7, Lerum",
+            project: "Badrumsrenovering, ca 9 m²",
+            building: "Rivning av badkar, nytt duschparti med duschväggar, ny kommod, flytt av handfat, behållen wc",
+            hvac: "Anpassning för flytt av handfat, byte av golvbrunn, anslutning till befintligt vatten och avlopp",
+            electrical: "Installation av elgolvvärme, nytt eldrag till golv och anslutning av elförbrukare",
+            ventilation: "Installation av ny fläkt för förbättrad frånluft"
+          },
+          chatHistory: [
+            {
+              id: "1",
+              text: "Hej Mats, tack för din förfrågan om badrumsrenovering på Björkvägen 7. Jag ser att du vill ta bort badkaret och sätta in duschväggar – stämmer det?",
+              sender: "ai",
+              timestamp: new Date("2024-01-19T10:00:00")
+            },
+            {
+              id: "2", 
+              text: "Ja det stämmer! Badkaret tar för mycket plats och vi använder mest duschen ändå.",
+              sender: "user",
+              timestamp: new Date("2024-01-19T10:00:30")
+            },
+            {
+              id: "3",
+              text: "Förstår. Vill du behålla toaletten och handfatet på samma plats, eller ska de flyttas?",
+              sender: "ai",
+              timestamp: new Date("2024-01-19T10:01:00")
+            },
+            {
+              id: "4",
+              text: "Toaletten kan sitta kvar men handfatet skulle jag vilja flytta närmare dörren för bättre flöde.",
+              sender: "user",
+              timestamp: new Date("2024-01-19T10:01:45")
+            },
+            {
+              id: "5",
+              text: "Noterat. När det gäller ventilationen – vill du ha en ny fläkt installerad, eller är det förbättring av befintlig du tänker på?",
+              sender: "ai",
+              timestamp: new Date("2024-01-19T10:02:15")
+            },
+            {
+              id: "6",
+              text: "Den nuvarande fläkten fungerar dåligt så en helt ny hade varit bra.",
+              sender: "user",
+              timestamp: new Date("2024-01-19T10:02:50")
+            },
+            {
+              id: "7",
+              text: "Bra. Och hur är det med golvvärme – vill du lägga in det i samband med renoveringen?",
+              sender: "ai",
+              timestamp: new Date("2024-01-19T10:03:20")
+            },
+            {
+              id: "8",
+              text: "Ja, elgolvvärme skulle vara perfekt!",
+              sender: "user",
+              timestamp: new Date("2024-01-19T10:03:45")
+            },
+            {
+              id: "9",
+              text: "Perfekt. Vet du om golvbrunnen behöver bytas, eller är den relativt ny?",
+              sender: "ai",
+              timestamp: new Date("2024-01-19T10:04:15")
+            },
+            {
+              id: "10",
+              text: "Den är nog från när huset byggdes så den borde bytas.",
+              sender: "user",
+              timestamp: new Date("2024-01-19T10:04:40")
+            }
+          ],
+          technicalRequirements: {
+            electrical: "Elgolvvärme, nya uttag",
+            plumbing: "Flytta handfat, ny golvbrunn, duschinstallation",
+            heating: "Elgolvvärme",
+            demolition: "Rivning av badkar",
+            structuralWork: "Mindre anpassningar för nya installationer",
+            permits: "Ej krävs för detta projekt",
+            groundwork: "Ej aktuellt",
+            otherTechnical: "Ny ventilationsfläkt"
+          },
+          materials: {
+            responsibility: "Vi står för material och arbetskraft",
+            preferences: "Moderna, funktionella lösningar",
+            style: "Skandinavisk stil",
+            inspirationImages: "Inga bifogade",
+            extras: "Duschväggar, ny kommod",
+            specialRequests: "Bra ventilation"
+          },
+          planning: {
+            drawingsIncluded: "Nej",
+            desiredStart: "Inom 2 veckor",
+            deadline: "Flexibel"
+          }
+        },
+        {
           id: "lead-005",
           serviceType: "VVS-arbeten", 
           scope: "Nytt badrum",
