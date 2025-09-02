@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LeadDashboard } from "@/components/LeadDashboard";
 import { Lead } from "@/types/lead";
+import { Button } from "@/components/ui/button";
 
 const AdminDashboard = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -8,6 +9,8 @@ const AdminDashboard = () => {
   useEffect(() => {
     // Load leads from localStorage or create example leads
     const savedLeads = JSON.parse(localStorage.getItem('leads') || '[]');
+    console.log('AdminDashboard: Loaded leads from localStorage:', savedLeads.length, 'leads');
+    console.log('AdminDashboard: Lead IDs found:', savedLeads.map((l: any) => l.id));
     
     if (savedLeads.length === 0) {
       // Create example leads
@@ -352,6 +355,8 @@ const AdminDashboard = () => {
       
       setLeads(exampleLeads);
       localStorage.setItem('leads', JSON.stringify(exampleLeads));
+      console.log('AdminDashboard: Created example leads:', exampleLeads.length, 'leads');
+      console.log('AdminDashboard: Example lead IDs:', exampleLeads.map(l => l.id));
     } else {
       // Convert createdAt strings back to Date objects
       const leadsWithDates = savedLeads.map((lead: any) => ({
@@ -359,6 +364,8 @@ const AdminDashboard = () => {
         createdAt: new Date(lead.createdAt)
       }));
       setLeads(leadsWithDates);
+      console.log('AdminDashboard: Using existing leads:', leadsWithDates.length, 'leads');
+      console.log('AdminDashboard: Existing lead IDs:', leadsWithDates.map((l: any) => l.id));
     }
   }, []);
 
@@ -368,6 +375,11 @@ const AdminDashboard = () => {
     );
     setLeads(updatedLeads);
     localStorage.setItem('leads', JSON.stringify(updatedLeads));
+  };
+
+  const resetToExampleData = () => {
+    localStorage.removeItem('leads');
+    window.location.reload(); // Reload to trigger useEffect and load example data
   };
 
   return (
@@ -381,6 +393,15 @@ const AdminDashboard = () => {
             <p className="text-muted-foreground">
               Hantera och följ upp dina inkommande förfrågningar
             </p>
+            <div className="mt-4">
+              <Button 
+                variant="outline" 
+                onClick={resetToExampleData}
+                className="text-sm"
+              >
+                Återställ till exempeldata (inkl. Mats lead)
+              </Button>
+            </div>
           </div>
         </div>
         
