@@ -9,6 +9,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import LeadDetail from "./pages/LeadDetail";
 import IntakePage from "./pages/IntakePage";
 import BuildingCompany from "./pages/BuildingCompany";
+import TraditionalFormPage from "./pages/TraditionalFormPage";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/intake" element={<IntakePage />} />
           <Route path="/company" element={<BuildingCompany />} />
+          <Route path="/traditional-form" element={<TraditionalFormPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/lead/:id" element={<LeadDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

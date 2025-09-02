@@ -135,11 +135,15 @@ const BuildingCompany = () => {
             pålitlighet och professionalism i varje projekt.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white">
-              Få gratis offert
+            <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white" asChild>
+              <a href="/traditional-form">
+                Få gratis offert
+              </a>
             </Button>
-            <Button variant="outline" size="lg">
-              Se våra projekt
+            <Button variant="outline" size="lg" asChild>
+              <a href="/intake">
+                AI-assisterad offert
+              </a>
             </Button>
           </div>
         </div>
