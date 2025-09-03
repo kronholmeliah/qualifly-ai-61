@@ -39,9 +39,11 @@ const ModernDashboard = () => {
   useEffect(() => {
     // Load leads from localStorage
     const savedLeads = JSON.parse(localStorage.getItem('leads') || '[]');
+    console.log('ModernDashboard: Loaded leads from localStorage:', savedLeads.length, 'leads');
+    console.log('ModernDashboard: Lead IDs found:', savedLeads.map((l: any) => l.id));
     
     if (savedLeads.length === 0) {
-      // Create example leads if none exist
+      // Create complete example leads if none exist
       const exampleLeads: Lead[] = [
         {
           id: "lead-001",
@@ -63,28 +65,6 @@ const ModernDashboard = () => {
           detailedDescription: "Komplett badrumsrenovering med moderna lösningar",
           projectType: "Badrum",
           renovationType: "Renovering"
-        },
-        {
-          id: "lead-mats",
-          serviceType: "Badrumsrenovering",
-          scope: "Ta bort badkar, installera duschväggar",
-          location: "Lerum",
-          timeframe: "Inom 2 veckor",
-          notes: "Chat genomförd med AI-assistent",
-          attachments: [],
-          estimatedCost: 120000,
-          score: 78,
-          margin: 25,
-          finalPrice: 150000,
-          createdAt: new Date("2024-01-19"),
-          status: "new" as const,
-          customerName: "Mats Nilsson",
-          customerContact: "mats.svensson@email.com",
-          customerAddress: "Björkvägen 7, Lerum",
-          detailedDescription: "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort det befintliga badkaret och istället sätta in duschväggar samt en ny kommod. Toaletten kan stå kvar på sin nuvarande plats, men handfatet ska flyttas närmare dörren. Ventilationen fungerar dåligt och Mats vill därför installera en ny fläkt. Han önskar även elgolvvärme i golvet och byte av den gamla golvbrunnen.",
-          projectType: "Badrum",
-          renovationType: "Renovering",
-          hasCompletedChat: true
         },
         {
           id: "lead-002",
@@ -127,6 +107,70 @@ const ModernDashboard = () => {
           detailedDescription: "Målning inför försäljning",
           projectType: "Målning",
           renovationType: "Renovering"
+        },
+        {
+          id: "lead-004", 
+          serviceType: "Helrenovering",
+          scope: "Komplett lägenhet",
+          location: "Uppsala",
+          timeframe: "Flexibel/Inget stressade",
+          notes: "Total renovering av 3:a, inget stressat",
+          attachments: [],
+          estimatedCost: 350000,
+          score: 40,
+          margin: 28,
+          finalPrice: 450000,
+          createdAt: new Date("2024-01-10"),
+          status: "quoted" as const,
+          customerName: "Michael Berg",
+          customerContact: "m.berg@company.se", 
+          customerAddress: "Parkvägen 15, 752 37 Uppsala",
+          detailedDescription: "3-rumslägenhet från 1960-talet, 75 m², kräver totalrenovering",
+          projectType: "Helrenovering",
+          renovationType: "Renovering"
+        },
+        {
+          id: "lead-mats",
+          serviceType: "Badrumsrenovering",
+          scope: "Ta bort badkar, installera duschväggar",
+          location: "Lerum",
+          timeframe: "Inom 2 veckor",
+          notes: "Chat genomförd med AI-assistent",
+          attachments: [],
+          estimatedCost: 120000,
+          score: 78,
+          margin: 25,
+          finalPrice: 150000,
+          createdAt: new Date("2024-01-19"),
+          status: "new" as const,
+          customerName: "Mats Nilsson",
+          customerContact: "mats.svensson@email.com",
+          customerAddress: "Björkvägen 7, Lerum",
+          detailedDescription: "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort det befintliga badkaret och istället sätta in duschväggar samt en ny kommod. Toaletten kan stå kvar på sin nuvarande plats, men handfatet ska flyttas närmare dörren. Ventilationen fungerar dåligt och Mats vill därför installera en ny fläkt. Han önskar även elgolvvärme i golvet och byte av den gamla golvbrunnen.",
+          projectType: "Badrum",
+          renovationType: "Renovering",
+          hasCompletedChat: true
+        },
+        {
+          id: "lead-005",
+          serviceType: "VVS-arbeten", 
+          scope: "Nytt badrum",
+          location: "Västerås",
+          timeframe: "Inom 3 månader",
+          notes: "VVS för nytt badrum i källare",
+          attachments: [],
+          estimatedCost: 75000,
+          score: 70,
+          margin: 26,
+          finalPrice: 95000,
+          createdAt: new Date("2024-01-14"),
+          status: "contacted" as const,
+          customerName: "Lena Gustafsson",
+          customerContact: "lena.g@hotmail.com",
+          customerAddress: "Björkvägen 22, 722 13 Västerås",
+          detailedDescription: "Installation av nytt badrum i villas källare",
+          projectType: "VVS-arbeten",
+          renovationType: "Nybyggnation"
         }
       ];
       
@@ -140,6 +184,146 @@ const ModernDashboard = () => {
       setLeads(leadsWithDates);
     }
   }, []);
+
+  const resetToExampleData = () => {
+    const exampleLeads: Lead[] = [
+      {
+        id: "lead-001",
+        serviceType: "Badrumsrenovering",
+        scope: "Helrenovering",
+        location: "Stockholm",
+        timeframe: "Inom 2 veckor",
+        notes: "Komplett badrumsrenovering med nya vitvaror och kakel",
+        attachments: [],
+        estimatedCost: 150000,
+        score: 85,
+        margin: 20,
+        finalPrice: 180000,
+        createdAt: new Date("2024-01-15"),
+        status: "new" as const,
+        customerName: "Sara Andersson",
+        customerContact: "sara.andersson@email.com",
+        customerAddress: "Köpmansgatan 4, 111 31 Stockholm",
+        detailedDescription: "Komplett badrumsrenovering med moderna lösningar",
+        projectType: "Badrum",
+        renovationType: "Renovering"
+      },
+      {
+        id: "lead-002",
+        serviceType: "Köksrenovering", 
+        scope: "Komplett renovering",
+        location: "Göteborg",
+        timeframe: "Inom 1 månad",
+        notes: "Stort kök med öppning mot vardagsrum, nya vitvaror",
+        attachments: [],
+        estimatedCost: 200000,
+        score: 65,
+        margin: 25,
+        finalPrice: 250000,
+        createdAt: new Date("2024-01-12"),
+        status: "contacted" as const,
+        customerName: "Erik Johansson",
+        customerContact: "erik.j@gmail.com",
+        customerAddress: "Vasagatan 12, 411 24 Göteborg",
+        detailedDescription: "Köksrenovering med öppen planlösning",
+        projectType: "Kök",
+        renovationType: "Renovering"
+      },
+      {
+        id: "lead-003",
+        serviceType: "Målning & tapetsering",
+        scope: "Vardagsrum och sovrum",
+        location: "Malmö",
+        timeframe: "Inom 1 vecka",
+        notes: "Snabbt jobb, måla om två rum",
+        attachments: [],
+        estimatedCost: 25000,
+        score: 90,
+        margin: 40,
+        finalPrice: 35000,
+        createdAt: new Date("2024-01-18"),
+        status: "new" as const,
+        customerName: "Anna Nilsson",
+        customerContact: "070-123-4567",
+        customerAddress: "Storgatan 8, 211 34 Malmö",
+        detailedDescription: "Målning inför försäljning",
+        projectType: "Målning",
+        renovationType: "Renovering"
+      },
+      {
+        id: "lead-004", 
+        serviceType: "Helrenovering",
+        scope: "Komplett lägenhet",
+        location: "Uppsala",
+        timeframe: "Flexibel/Inget stressade",
+        notes: "Total renovering av 3:a, inget stressat",
+        attachments: [],
+        estimatedCost: 350000,
+        score: 40,
+        margin: 28,
+        finalPrice: 450000,
+        createdAt: new Date("2024-01-10"),
+        status: "quoted" as const,
+        customerName: "Michael Berg",
+        customerContact: "m.berg@company.se", 
+        customerAddress: "Parkvägen 15, 752 37 Uppsala",
+        detailedDescription: "3-rumslägenhet från 1960-talet, 75 m², kräver totalrenovering",
+        projectType: "Helrenovering",
+        renovationType: "Renovering"
+      },
+      {
+        id: "lead-mats",
+        serviceType: "Badrumsrenovering",
+        scope: "Ta bort badkar, installera duschväggar",
+        location: "Lerum",
+        timeframe: "Inom 2 veckor",
+        notes: "Chat genomförd med AI-assistent",
+        attachments: [],
+        estimatedCost: 120000,
+        score: 78,
+        margin: 25,
+        finalPrice: 150000,
+        createdAt: new Date("2024-01-19"),
+        status: "new" as const,
+        customerName: "Mats Nilsson",
+        customerContact: "mats.svensson@email.com",
+        customerAddress: "Björkvägen 7, Lerum",
+        detailedDescription: "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort det befintliga badkaret och istället sätta in duschväggar samt en ny kommod. Toaletten kan stå kvar på sin nuvarande plats, men handfatet ska flyttas närmare dörren. Ventilationen fungerar dåligt och Mats vill därför installera en ny fläkt. Han önskar även elgolvvärme i golvet och byte av den gamla golvbrunnen.",
+        projectType: "Badrum",
+        renovationType: "Renovering",
+        hasCompletedChat: true
+      },
+      {
+        id: "lead-005",
+        serviceType: "VVS-arbeten", 
+        scope: "Nytt badrum",
+        location: "Västerås",
+        timeframe: "Inom 3 månader",
+        notes: "VVS för nytt badrum i källare",
+        attachments: [],
+        estimatedCost: 75000,
+        score: 70,
+        margin: 26,
+        finalPrice: 95000,
+        createdAt: new Date("2024-01-14"),
+        status: "contacted" as const,
+        customerName: "Lena Gustafsson",
+        customerContact: "lena.g@hotmail.com",
+        customerAddress: "Björkvägen 22, 722 13 Västerås",
+        detailedDescription: "Installation av nytt badrum i villas källare",
+        projectType: "VVS-arbeten",
+        renovationType: "Nybyggnation"
+      }
+    ];
+    
+    localStorage.clear();
+    localStorage.setItem('leads', JSON.stringify(exampleLeads));
+    setLeads(exampleLeads);
+    toast({
+      title: "Data återställd",
+      description: "Alla leads har återställts till exempeldata med Mats Nilsson inkluderad."
+    });
+  };
 
   // Filter leads
   const filteredLeads = leads.filter(lead => {
@@ -206,12 +390,23 @@ const ModernDashboard = () => {
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-            Modern Dashboard
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Hantera dina leads med stil och effektivitet
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-4xl font-bold text-foreground mb-2 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                Modern Dashboard
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Hantera dina leads med stil och effektivitet
+              </p>
+            </div>
+            <Button 
+              onClick={resetToExampleData}
+              variant="outline"
+              className="w-fit"
+            >
+              Återställ Data
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
