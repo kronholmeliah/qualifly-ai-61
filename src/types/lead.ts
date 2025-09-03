@@ -75,6 +75,20 @@ export interface StructuredProject {
   
   // 7. Sammanfattning i löpande text
   executiveSummary: string;
+  
+  // AI-genererad strukturerad sammanfattning
+  aiSummary?: {
+    projektinnehall: string[];
+    tekniska_krav: {
+      "Bygg & stomme": "[x]" | "[ ]";
+      "VVS": "[x]" | "[ ]";
+      "El & styr": "[x]" | "[ ]";
+      "Ventilation & inomhusklimat": "[x]" | "[ ]";
+      "Klimatskal": "[x]" | "[ ]";
+      "Mark & grund": "[x]" | "[ ]";
+      "Status & risk": "[x]" | "[ ]";
+    };
+  };
 }
 
 export interface Lead {

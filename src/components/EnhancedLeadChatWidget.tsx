@@ -14,7 +14,7 @@ interface ChatMessage {
   options?: string[];
 }
 
-interface DetailedLeadData {
+export interface DetailedLeadData {
   // Kunduppgifter
   kund_namn: string;
   kontakt: string;

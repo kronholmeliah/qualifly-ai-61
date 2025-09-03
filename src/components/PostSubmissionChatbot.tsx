@@ -85,18 +85,55 @@ const PostSubmissionChatbot: React.FC<PostSubmissionChatbotProps> = ({ customerD
     } else {
       // Show final summary
       setTimeout(() => {
+        // Generate structured summary using AI service
+        const { generateStructuredProjectSummary } = require('@/utils/aiSummaryService');
+        
+        // Create mock lead data from customer data and conversation
+        const mockLeadData = {
+          kund_namn: customerData.name || 'Kund',
+          kontakt: customerData.phone || customerData.email || '',
+          adress: customerData.address || '',
+          projekttyp: 'Badrum',
+          status: 'Renovering',
+          kort_beskrivning: 'Totalrenovering av badrum med duschväggar',
+          elinstallation: 'ja',
+          vvs_installation: 'ja',
+          golvvärme: 'ja, elgolvvärme',
+          rivning: 'ja',
+          barande_ingrepp: 'nej',
+          bygglov_status: 'ej behövs',
+          markarbete: 'nej',
+          ovriga_tekniska_krav: 'ny golvbrunn, ventilationsfläkt',
+          materialansvar: '',
+          materialpreferenser: '',
+          stilpreferens: '',
+          inspirationsbilder: '',
+          tillval: '',
+          specialonskemal: '',
+          ritning_bifogad: '',
+          onskad_start: '',
+          deadline: ''
+        };
+        
+        const structuredSummary = generateStructuredProjectSummary(mockLeadData);
+        
+        let summaryText = "Tack för all information. Vi återkommer till dig inom 24 timmar för att bekräfta projektet och föreslå en tid för platsbesiktning.\n\n";
+        
+        summaryText += "**Projektinnehåll:**\n";
+        structuredSummary.projektinnehall.forEach((punkt, index) => {
+          summaryText += `${index + 1}. ${punkt}\n`;
+        });
+        
+        summaryText += "\n**Tekniska krav:**\n";
+        Object.entries(structuredSummary.tekniska_krav).forEach(([kategori, status]) => {
+          summaryText += `${status} ${kategori}\n`;
+        });
+        
+        summaryText += "\nVill du att vi bokar en kostnadsfri platsbesök för en exakt offert, eller ska vi skicka en preliminär offert baserat på dessa uppgifter?";
+        
         const summaryMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: `Tack för all information. Vi återkommer till dig inom 24 timmar för att bekräfta projektet och föreslå en tid för platsbesiktning.
-
-📍 Adress: ${customerData.address || 'Ej angivet'}
-🛁 Ta bort badkar, installera duschväggar
-🚽 Toalett behålls, handfat flyttas närmare dörren
-💨 Ny ventilationsfläkt (gammal fungerar dåligt)
-⚡ Elgolvvärme
-🔧 Ny golvbrunn (gammal från husets byggnad)
-
-Vill du att vi bokar en kostnadsfri platsbesök för en exakt offert, eller ska vi skicka en preliminär offert baserat på dessa uppgifter?`,
+          text: summaryText,
           sender: 'ai',
           timestamp: new Date()
         };
