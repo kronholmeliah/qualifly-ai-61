@@ -68,7 +68,28 @@ export const EXAMPLE_LEADS: Lead[] = [
         asbestos: 'Huset byggt 1985, låg risk för asbest',
         radon: 'Normalvärden enligt senaste mätning'
       },
-      executiveSummary: 'Kunden önskar en totalrenovering av ett badrum på cirka 9 m² i sin villa. Projektet omfattar rivning av befintligt badkar och installation av duschvägg, byte av golvbrunn samt omdragning av vatten för nytt handfat närmare dörren. Elgolvvärme och nya uttag vid spegeln ska installeras, tillsammans med ny våtrumsfläkt för bättre ventilation. Inga kända fuktproblem finns i dagsläget. Kunden vill gärna påbörja arbetet under våren och budgeten ligger runt 180 000 kr.'
+      executiveSummary: 'Kunden önskar en totalrenovering av ett badrum på cirka 9 m² i sin villa. Projektet omfattar rivning av befintligt badkar och installation av duschvägg, byte av golvbrunn samt omdragning av vatten för nytt handfat närmare dörren. Elgolvvärme och nya uttag vid spegeln ska installeras, tillsammans med ny våtrumsfläkt för bättre ventilation. Inga kända fuktproblem finns i dagsläget. Kunden vill gärna påbörja arbetet under våren och budgeten ligger runt 180 000 kr.',
+      aiSummary: {
+        projektinnehall: [
+          'Rivning av befintligt badkar och kakel',
+          'Installation av ny duschvägg',
+          'Byte av golvbrunn',
+          'Omdragning av vattenrör för handfat',
+          'Installation av elgolvvärme',
+          'Installation av ny våtrumsfläkt',
+          'Nya uttag vid spegeln',
+          'Klinkerplattor på vägg och golv'
+        ],
+        tekniska_krav: {
+          'Bygg & stomme': '[ ]',
+          'VVS': '[x]',
+          'El & styr': '[x]',
+          'Ventilation & inomhusklimat': '[x]',
+          'Klimatskal': '[x]',
+          'Mark & grund': '[ ]',
+          'Status & risk': '[ ]'
+        }
+      }
     },
     technicalRequirements: {
       electrical: 'Nya uttag vid spegeln, elgolvvärme med termostat',
