@@ -44,6 +44,11 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onClick }) => {
                   AI Chat
                 </Badge>
               )}
+              {lead.structuredProject?.aiSummary && (
+                <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                  🤖 AI Summary
+                </Badge>
+              )}
             </div>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">

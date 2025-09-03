@@ -263,8 +263,66 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
               </CardContent>
             </Card>
 
-            {/* 🏗️ Strukturerad Projektsammanställning */}
-            {lead.structuredProject && (
+            {/* AI-genererad Projektanalys */}
+            {lead.structuredProject?.aiSummary ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    🤖 AI-Projektanalys
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Projektinnehåll */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">Projektinnehåll</Label>
+                    <div className="mt-2 bg-background border rounded-md p-3">
+                      <ul className="space-y-1.5">
+                        {lead.structuredProject.aiSummary.projektinnehall.map((item, index) => (
+                          <li key={index} className="flex items-start gap-2 text-sm">
+                            <div className="w-1 h-1 bg-primary rounded-full mt-2 shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Tekniska krav - Checklista */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">Tekniska krav</Label>
+                    <div className="mt-2 bg-background border rounded-md p-3">
+                      <div className="grid gap-2">
+                        {Object.entries(lead.structuredProject.aiSummary.tekniska_krav).map(([kategori, status]) => (
+                          <div key={kategori} className="flex items-center gap-2">
+                            <div className={`w-4 h-4 border rounded flex items-center justify-center text-xs ${
+                              status === "[x]" 
+                                ? "bg-primary border-primary text-primary-foreground" 
+                                : "border-muted-foreground/30"
+                            }`}>
+                              {status === "[x]" ? "✓" : ""}
+                            </div>
+                            <span className={`text-sm ${
+                              status === "[x]" ? "font-medium" : "text-muted-foreground"
+                            }`}>
+                              {kategori}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sammanfattning */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">Projektsammanfattning</Label>
+                    <p className="text-sm leading-relaxed bg-muted p-3 rounded-md mt-2">
+                      {lead.structuredProject.executiveSummary}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : lead.structuredProject && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
@@ -273,7 +331,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {/* 7. Sammanfattning i löpande text */}
+                  {/* Sammanfattning */}
                   <div>
                     <Label className="text-sm font-medium text-foreground">Sammanfattning</Label>
                     <p className="text-sm leading-relaxed bg-muted p-4 rounded-md mt-2">
@@ -281,113 +339,27 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
                     </p>
                   </div>
 
-                  {/* 1. Projekttyp */}
+                  {/* Projekttyp */}
                   <div>
                     <Label className="text-sm font-medium text-foreground">1. Projekttyp</Label>
                     <p className="text-sm mt-1">{lead.structuredProject.projectCategory}</p>
                   </div>
+                </CardContent>
+              </Card>
+            )}
 
-                  {/* 2. Omfattning */}
+            {/* Fallback AI Summary eller autogenererad sammanfattning */}
+            {!lead.structuredProject && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    Projektsammanfattning
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div>
-                    <Label className="text-sm font-medium text-foreground">2. Omfattning</Label>
-                    <div className="mt-2 space-y-2 text-sm">
-                      {lead.structuredProject.scope.size && (
-                        <div><span className="font-medium">Storlek:</span> {lead.structuredProject.scope.size}</div>
-                      )}
-                      {lead.structuredProject.scope.demolition && (
-                        <div><span className="font-medium">Rivning:</span> {lead.structuredProject.scope.demolition}</div>
-                      )}
-                      {lead.structuredProject.scope.newConstruction && (
-                        <div><span className="font-medium">Nybyggnation:</span> {lead.structuredProject.scope.newConstruction}</div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 3. Tekniska krav */}
-                  <div>
-                    <Label className="text-sm font-medium text-foreground">3. Tekniska krav</Label>
-                    <div className="mt-2 space-y-3 text-sm">
-                      {/* Bygg & stomme */}
-                      {lead.structuredProject.technicalRequirements.construction && (
-                        <div>
-                          <span className="font-medium text-muted-foreground">Bygg & stomme:</span>
-                          <div className="ml-4 mt-1 space-y-1">
-                            {Object.entries(lead.structuredProject.technicalRequirements.construction).map(([key, value]) => 
-                              value && <div key={key}><span className="capitalize">{key === 'walls' ? 'Väggar' : key === 'floors' ? 'Golv' : key === 'ceiling' ? 'Tak' : key === 'structural' ? 'Bärande' : key === 'surfacing' ? 'Ytskikt' : key}:</span> {value}</div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* VVS */}
-                      {lead.structuredProject.technicalRequirements.plumbing && (
-                        <div>
-                          <span className="font-medium text-muted-foreground">VVS:</span>
-                          <div className="ml-4 mt-1 space-y-1">
-                            {Object.entries(lead.structuredProject.technicalRequirements.plumbing).map(([key, value]) => 
-                              value && <div key={key}><span className="capitalize">{key === 'waterSupply' ? 'Vatten/avlopp' : key === 'drains' ? 'Golvbrunn' : key === 'heating' ? 'Värme' : key}:</span> {value}</div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* El & styr */}
-                      {lead.structuredProject.technicalRequirements.electrical && (
-                        <div>
-                          <span className="font-medium text-muted-foreground">El & styr:</span>
-                          <div className="ml-4 mt-1 space-y-1">
-                            {Object.entries(lead.structuredProject.technicalRequirements.electrical).map(([key, value]) => 
-                              value && <div key={key}><span className="capitalize">{key === 'outlets' ? 'Uttag' : key === 'panel' ? 'Central' : key === 'lighting' ? 'Belysning' : key === 'floorHeating' ? 'Golvvärme' : key}:</span> {value}</div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Ventilation */}
-                      {lead.structuredProject.technicalRequirements.ventilation && (
-                        <div>
-                          <span className="font-medium text-muted-foreground">Ventilation:</span>
-                          <div className="ml-4 mt-1 space-y-1">
-                            {Object.entries(lead.structuredProject.technicalRequirements.ventilation).map(([key, value]) => 
-                              value && <div key={key}><span className="capitalize">{key === 'fans' ? 'Fläktar' : key === 'ducts' ? 'Kanaler' : key === 'airflow' ? 'Luftflöde' : key}:</span> {value}</div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Klimatskal / Mark */}
-                      {lead.structuredProject.technicalRequirements.building && (
-                        <div>
-                          <span className="font-medium text-muted-foreground">Klimatskal / Mark:</span>
-                          <div className="ml-4 mt-1 space-y-1">
-                            {Object.entries(lead.structuredProject.technicalRequirements.building).map(([key, value]) => 
-                              value && <div key={key}><span className="capitalize">{key === 'roof' ? 'Tak' : key === 'facade' ? 'Fasad' : key === 'windows' ? 'Fönster' : key === 'drainage' ? 'Dränering' : key === 'foundation' ? 'Grund' : key === 'access' ? 'Åtkomst' : key}:</span> {value}</div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 4. Tidsram */}
-                  <div>
-                    <Label className="text-sm font-medium text-foreground">4. Tidsram</Label>
-                    <div className="mt-2 space-y-1 text-sm">
-                      {lead.structuredProject.timeline.startTime && (
-                        <div><span className="font-medium">Starttid:</span> {lead.structuredProject.timeline.startTime}</div>
-                      )}
-                      {lead.structuredProject.timeline.deadline && (
-                        <div><span className="font-medium">Deadline:</span> {lead.structuredProject.timeline.deadline}</div>
-                      )}
-                      {lead.structuredProject.timeline.restrictions && (
-                        <div><span className="font-medium">Restriktioner:</span> {lead.structuredProject.timeline.restrictions}</div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 5. Kostnad */}
-                  <div>
-                    <Label className="text-sm font-medium text-foreground">5. Kostnad</Label>
+                    <Label className="text-sm font-medium text-foreground">Auto-genererad sammanfattning</Label>
                     <div className="mt-2 space-y-1 text-sm">
                       {lead.structuredProject.cost.budgetRange && (
                         <div><span className="font-medium">Budget:</span> {lead.structuredProject.cost.budgetRange}</div>
