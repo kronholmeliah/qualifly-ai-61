@@ -374,24 +374,39 @@ const LeadDetail = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(lead.technicalRequirements).map(([key, value]) => (
-                      value && key !== 'permits' && (
-                        <div key={key}>
-                          <p className="text-sm font-medium text-muted-foreground mb-1">
-                            {key === 'electrical' ? 'Elinstallation' :
-                             key === 'plumbing' ? 'VVS' :
-                             key === 'heating' ? 'Värme/Golvvärme' :
-                             key === 'demolition' ? 'Rivning' :
-                             key === 'structuralWork' ? 'Bärande ingrepp' :
-                             key === 'groundwork' ? 'Markarbete' :
-                             'Övrigt'}
-                          </p>
-                          <p className="text-sm">{value}</p>
+                  {lead.structuredProject?.aiSummary?.tekniska_krav ? (
+                    <div className="space-y-3">
+                      {Object.entries(lead.structuredProject.aiSummary.tekniska_krav).map(([kategori, status]) => (
+                        <div key={kategori} className="flex items-center gap-3">
+                          <div className="w-4 h-4 border border-border rounded flex items-center justify-center text-xs font-mono">
+                            {status === "[x]" ? "✓" : " "}
+                          </div>
+                          <span className={`text-sm ${status === "[x]" ? "font-medium" : "text-muted-foreground"}`}>
+                            {kategori}
+                          </span>
                         </div>
-                      )
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(lead.technicalRequirements).map(([key, value]) => (
+                        value && key !== 'permits' && (
+                          <div key={key}>
+                            <p className="text-sm font-medium text-muted-foreground mb-1">
+                              {key === 'electrical' ? 'Elinstallation' :
+                               key === 'plumbing' ? 'VVS' :
+                               key === 'heating' ? 'Värme/Golvvärme' :
+                               key === 'demolition' ? 'Rivning' :
+                               key === 'structuralWork' ? 'Bärande ingrepp' :
+                               key === 'groundwork' ? 'Markarbete' :
+                               'Övrigt'}
+                            </p>
+                            <p className="text-sm">{value}</p>
+                          </div>
+                        )
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
