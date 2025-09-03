@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 const ModernDashboard = () => {
+  const navigate = useNavigate();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -328,7 +330,11 @@ const ModernDashboard = () => {
         {/* Leads Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredLeads.map((lead) => (
-            <Card key={lead.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <Card 
+              key={lead.id} 
+              className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+              onClick={() => navigate(`/admin/lead/${lead.id}`)}
+            >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -385,20 +391,6 @@ const ModernDashboard = () => {
                   <div className="text-lg font-bold text-primary">
                     {(lead.finalPrice || lead.estimatedCost).toLocaleString()} kr
                   </div>
-                  <Select 
-                    value={lead.status} 
-                    onValueChange={(value) => handleUpdateStatus(lead.id, value as "new" | "contacted" | "quoted" | "closed")}
-                  >
-                    <SelectTrigger className="w-32 h-8">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="new">Ny</SelectItem>
-                      <SelectItem value="contacted">Kontaktad</SelectItem>
-                      <SelectItem value="quoted">Offererad</SelectItem>
-                      <SelectItem value="closed">Stängd</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </CardContent>
             </Card>
