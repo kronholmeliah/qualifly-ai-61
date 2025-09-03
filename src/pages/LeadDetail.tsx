@@ -27,15 +27,9 @@ const LeadDetail = () => {
     const savedLeads = JSON.parse(localStorage.getItem('leads') || '[]');
     const foundLead = savedLeads.find((l: Lead) => l.id === id);
     if (foundLead) {
-      // Update Mats's description and status if this is his lead
-      if (foundLead.id === 'lead-mats') {
-        foundLead.detailedDescription = "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort badkaret och ersätta det med duschväggar samt en ny kommod. Toaletten behålls på samma plats, men handfatet ska flyttas närmare dörren. Ventilationen ska förbättras genom installation av en ny fläkt. Han önskar elgolvvärme i golvet och byte av den gamla golvbrunnen.";
-        foundLead.status = "new";
-        // Update localStorage with the new description
-        const updatedLeads = savedLeads.map((l: Lead) => 
-          l.id === 'lead-mats' ? foundLead : l
-        );
-        localStorage.setItem('leads', JSON.stringify(updatedLeads));
+      // Parse dates if they're strings
+      if (typeof foundLead.createdAt === 'string') {
+        foundLead.createdAt = new Date(foundLead.createdAt);
       }
       setLead(foundLead);
     }
@@ -132,68 +126,275 @@ const LeadDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Project Description */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ClipboardList className="h-5 w-5" />
-                  Projektbeskrivning
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+            {/* 🏗️ Strukturerad Projektsammanställning */}
+            {lead.structuredProject ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ClipboardList className="h-5 w-5" />
+                    🏗️ Strukturerad projektsammanställning
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Sammanfattning */}
                   <div>
-                    <h4 className="font-medium mb-2">Detaljerad beskrivning</h4>
-                    <p className="text-muted-foreground">{lead.detailedDescription}</p>
+                    <h4 className="font-medium mb-2">Sammanfattning</h4>
+                    <p className="text-muted-foreground leading-relaxed bg-muted p-4 rounded-md">
+                      {lead.structuredProject.executiveSummary}
+                    </p>
                   </div>
-                  <Separator />
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Projekttyp</p>
-                      <p className="font-medium">{lead.projectType}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Typ</p>
-                      <p className="font-medium">{lead.renovationType}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Omfattning</p>
-                      <p className="font-medium">{lead.scope}</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            {/* Technical Requirements */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Wrench className="h-5 w-5" />
-                  Tekniska krav
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {lead.technicalRequirements && Object.entries(lead.technicalRequirements).map(([key, value]) => (
-                    value && key !== 'permits' && (
-                      <div key={key}>
-                        <p className="text-sm font-medium text-muted-foreground mb-1">
-                          {key === 'electrical' ? 'Elinstallation' :
-                           key === 'plumbing' ? 'VVS' :
-                           key === 'heating' ? 'Värme/Golvvärme' :
-                           key === 'demolition' ? 'Rivning' :
-                           key === 'structuralWork' ? 'Bärande ingrepp' :
-                           key === 'groundwork' ? 'Markarbete' :
-                           'Övrigt'}
-                        </p>
-                        <p className="text-sm">{value}</p>
+                  <Separator />
+
+                  {/* Grundläggande projektinfo */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">1. Projekttyp</p>
+                      <p className="font-medium">{lead.structuredProject.projectCategory}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Storlek</p>
+                      <p className="font-medium">{lead.structuredProject.scope.size}</p>
+                    </div>
+                  </div>
+
+                  {/* 2. Omfattning */}
+                  {(lead.structuredProject.scope.demolition || lead.structuredProject.scope.newConstruction) && (
+                    <div>
+                      <h5 className="font-medium mb-2">2. Omfattning</h5>
+                      <div className="space-y-2 text-sm">
+                        {lead.structuredProject.scope.demolition && (
+                          <div><span className="font-medium">Rivning:</span> {lead.structuredProject.scope.demolition}</div>
+                        )}
+                        {lead.structuredProject.scope.newConstruction && (
+                          <div><span className="font-medium">Nybyggnation:</span> {lead.structuredProject.scope.newConstruction}</div>
+                        )}
                       </div>
-                    )
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    </div>
+                  )}
+
+                  {/* 4. Tidsram */}
+                  {(lead.structuredProject.timeline.startTime || lead.structuredProject.timeline.deadline) && (
+                    <div>
+                      <h5 className="font-medium mb-2">4. Tidsram</h5>
+                      <div className="space-y-1 text-sm">
+                        {lead.structuredProject.timeline.startTime && (
+                          <div><span className="font-medium">Start:</span> {lead.structuredProject.timeline.startTime}</div>
+                        )}
+                        {lead.structuredProject.timeline.deadline && (
+                          <div><span className="font-medium">Deadline:</span> {lead.structuredProject.timeline.deadline}</div>
+                        )}
+                        {lead.structuredProject.timeline.restrictions && (
+                          <div><span className="font-medium">Restriktioner:</span> {lead.structuredProject.timeline.restrictions}</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 5. Kostnad */}
+                  {(lead.structuredProject.cost.budgetRange || lead.structuredProject.cost.financing) && (
+                    <div>
+                      <h5 className="font-medium mb-2">5. Kostnad</h5>
+                      <div className="space-y-1 text-sm">
+                        {lead.structuredProject.cost.budgetRange && (
+                          <div><span className="font-medium">Budget:</span> {lead.structuredProject.cost.budgetRange}</div>
+                        )}
+                        {lead.structuredProject.cost.financing && (
+                          <div><span className="font-medium">Finansiering:</span> {lead.structuredProject.cost.financing}</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ClipboardList className="h-5 w-5" />
+                    Projektbeskrivning
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Detaljerad beskrivning</h4>
+                      <p className="text-muted-foreground">{lead.detailedDescription}</p>
+                    </div>
+                    <Separator />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Projekttyp</p>
+                        <p className="font-medium">{lead.projectType}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Typ</p>
+                        <p className="font-medium">{lead.renovationType}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Omfattning</p>
+                        <p className="font-medium">{lead.scope}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* 3. Tekniska krav */}
+            {lead.structuredProject?.technicalRequirements ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Wrench className="h-5 w-5" />
+                    3. Tekniska krav
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Bygg & stomme */}
+                  {lead.structuredProject.technicalRequirements.construction && (
+                    <div>
+                      <h5 className="font-medium text-muted-foreground mb-2">Bygg & stomme</h5>
+                      <div className="space-y-1 text-sm ml-4">
+                        {Object.entries(lead.structuredProject.technicalRequirements.construction).map(([key, value]) => 
+                          value && (
+                            <div key={key}>
+                              <span className="font-medium">
+                                {key === 'walls' ? 'Väggar' : key === 'floors' ? 'Golv' : key === 'ceiling' ? 'Tak' : 
+                                 key === 'structural' ? 'Bärande' : key === 'surfacing' ? 'Ytskikt' : key}:
+                              </span> {value}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* VVS */}
+                  {lead.structuredProject.technicalRequirements.plumbing && (
+                    <div>
+                      <h5 className="font-medium text-muted-foreground mb-2">VVS</h5>
+                      <div className="space-y-1 text-sm ml-4">
+                        {Object.entries(lead.structuredProject.technicalRequirements.plumbing).map(([key, value]) => 
+                          value && (
+                            <div key={key}>
+                              <span className="font-medium">
+                                {key === 'waterSupply' ? 'Vatten/avlopp' : key === 'drains' ? 'Golvbrunn' : 
+                                 key === 'heating' ? 'Värme/golvvärme' : key}:
+                              </span> {value}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* El & styr */}
+                  {lead.structuredProject.technicalRequirements.electrical && (
+                    <div>
+                      <h5 className="font-medium text-muted-foreground mb-2">El & styr</h5>
+                      <div className="space-y-1 text-sm ml-4">
+                        {Object.entries(lead.structuredProject.technicalRequirements.electrical).map(([key, value]) => 
+                          value && (
+                            <div key={key}>
+                              <span className="font-medium">
+                                {key === 'outlets' ? 'Uttag' : key === 'panel' ? 'Central' : key === 'lighting' ? 'Belysning' : 
+                                 key === 'floorHeating' ? 'Golvvärme' : key}:
+                              </span> {value}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Ventilation */}
+                  {lead.structuredProject.technicalRequirements.ventilation && (
+                    <div>
+                      <h5 className="font-medium text-muted-foreground mb-2">Ventilation & inomhusklimat</h5>
+                      <div className="space-y-1 text-sm ml-4">
+                        {Object.entries(lead.structuredProject.technicalRequirements.ventilation).map(([key, value]) => 
+                          value && (
+                            <div key={key}>
+                              <span className="font-medium">
+                                {key === 'fans' ? 'Fläktar' : key === 'ducts' ? 'Kanaler' : key === 'airflow' ? 'Luftflöde' : key}:
+                              </span> {value}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Klimatskal / Mark */}
+                  {lead.structuredProject.technicalRequirements.building && (
+                    <div>
+                      <h5 className="font-medium text-muted-foreground mb-2">Klimatskal / Mark</h5>
+                      <div className="space-y-1 text-sm ml-4">
+                        {Object.entries(lead.structuredProject.technicalRequirements.building).map(([key, value]) => 
+                          value && (
+                            <div key={key}>
+                              <span className="font-medium">
+                                {key === 'roof' ? 'Tak' : key === 'facade' ? 'Fasad' : key === 'windows' ? 'Fönster' : 
+                                 key === 'drainage' ? 'Dränering' : key === 'foundation' ? 'Grund' : key === 'access' ? 'Åtkomst' : key}:
+                              </span> {value}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 6. Status & risk */}
+                  {lead.structuredProject.riskAssessment && Object.values(lead.structuredProject.riskAssessment).some(v => v) && (
+                    <div>
+                      <h5 className="font-medium text-muted-foreground mb-2">6. Status & risk</h5>
+                      <div className="space-y-1 text-sm ml-4">
+                        {Object.entries(lead.structuredProject.riskAssessment).map(([key, value]) => 
+                          value && (
+                            <div key={key}>
+                              <span className="font-medium">
+                                {key === 'moisture' ? 'Fukt' : key === 'mold' ? 'Mögel' : key === 'asbestos' ? 'Asbest' : 
+                                 key === 'radon' ? 'Radon' : key === 'heritage' ? 'Kulturklassning' : key === 'other' ? 'Övrigt' : key}:
+                              </span> {value}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ) : lead.technicalRequirements && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Wrench className="h-5 w-5" />
+                    Tekniska krav
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.entries(lead.technicalRequirements).map(([key, value]) => (
+                      value && key !== 'permits' && (
+                        <div key={key}>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">
+                            {key === 'electrical' ? 'Elinstallation' :
+                             key === 'plumbing' ? 'VVS' :
+                             key === 'heating' ? 'Värme/Golvvärme' :
+                             key === 'demolition' ? 'Rivning' :
+                             key === 'structuralWork' ? 'Bärande ingrepp' :
+                             key === 'groundwork' ? 'Markarbete' :
+                             'Övrigt'}
+                          </p>
+                          <p className="text-sm">{value}</p>
+                        </div>
+                      )
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
           </div>
 

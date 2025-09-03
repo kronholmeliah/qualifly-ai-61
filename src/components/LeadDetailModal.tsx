@@ -263,8 +263,167 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
               </CardContent>
             </Card>
 
-            {/* AI Summary */}
-            {lead.aiSummary && (
+            {/* 🏗️ Strukturerad Projektsammanställning */}
+            {lead.structuredProject && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    🏗️ Strukturerad projektsammanställning
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* 7. Sammanfattning i löpande text */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">Sammanfattning</Label>
+                    <p className="text-sm leading-relaxed bg-muted p-4 rounded-md mt-2">
+                      {lead.structuredProject.executiveSummary}
+                    </p>
+                  </div>
+
+                  {/* 1. Projekttyp */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">1. Projekttyp</Label>
+                    <p className="text-sm mt-1">{lead.structuredProject.projectCategory}</p>
+                  </div>
+
+                  {/* 2. Omfattning */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">2. Omfattning</Label>
+                    <div className="mt-2 space-y-2 text-sm">
+                      {lead.structuredProject.scope.size && (
+                        <div><span className="font-medium">Storlek:</span> {lead.structuredProject.scope.size}</div>
+                      )}
+                      {lead.structuredProject.scope.demolition && (
+                        <div><span className="font-medium">Rivning:</span> {lead.structuredProject.scope.demolition}</div>
+                      )}
+                      {lead.structuredProject.scope.newConstruction && (
+                        <div><span className="font-medium">Nybyggnation:</span> {lead.structuredProject.scope.newConstruction}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 3. Tekniska krav */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">3. Tekniska krav</Label>
+                    <div className="mt-2 space-y-3 text-sm">
+                      {/* Bygg & stomme */}
+                      {lead.structuredProject.technicalRequirements.construction && (
+                        <div>
+                          <span className="font-medium text-muted-foreground">Bygg & stomme:</span>
+                          <div className="ml-4 mt-1 space-y-1">
+                            {Object.entries(lead.structuredProject.technicalRequirements.construction).map(([key, value]) => 
+                              value && <div key={key}><span className="capitalize">{key === 'walls' ? 'Väggar' : key === 'floors' ? 'Golv' : key === 'ceiling' ? 'Tak' : key === 'structural' ? 'Bärande' : key === 'surfacing' ? 'Ytskikt' : key}:</span> {value}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* VVS */}
+                      {lead.structuredProject.technicalRequirements.plumbing && (
+                        <div>
+                          <span className="font-medium text-muted-foreground">VVS:</span>
+                          <div className="ml-4 mt-1 space-y-1">
+                            {Object.entries(lead.structuredProject.technicalRequirements.plumbing).map(([key, value]) => 
+                              value && <div key={key}><span className="capitalize">{key === 'waterSupply' ? 'Vatten/avlopp' : key === 'drains' ? 'Golvbrunn' : key === 'heating' ? 'Värme' : key}:</span> {value}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* El & styr */}
+                      {lead.structuredProject.technicalRequirements.electrical && (
+                        <div>
+                          <span className="font-medium text-muted-foreground">El & styr:</span>
+                          <div className="ml-4 mt-1 space-y-1">
+                            {Object.entries(lead.structuredProject.technicalRequirements.electrical).map(([key, value]) => 
+                              value && <div key={key}><span className="capitalize">{key === 'outlets' ? 'Uttag' : key === 'panel' ? 'Central' : key === 'lighting' ? 'Belysning' : key === 'floorHeating' ? 'Golvvärme' : key}:</span> {value}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Ventilation */}
+                      {lead.structuredProject.technicalRequirements.ventilation && (
+                        <div>
+                          <span className="font-medium text-muted-foreground">Ventilation:</span>
+                          <div className="ml-4 mt-1 space-y-1">
+                            {Object.entries(lead.structuredProject.technicalRequirements.ventilation).map(([key, value]) => 
+                              value && <div key={key}><span className="capitalize">{key === 'fans' ? 'Fläktar' : key === 'ducts' ? 'Kanaler' : key === 'airflow' ? 'Luftflöde' : key}:</span> {value}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Klimatskal / Mark */}
+                      {lead.structuredProject.technicalRequirements.building && (
+                        <div>
+                          <span className="font-medium text-muted-foreground">Klimatskal / Mark:</span>
+                          <div className="ml-4 mt-1 space-y-1">
+                            {Object.entries(lead.structuredProject.technicalRequirements.building).map(([key, value]) => 
+                              value && <div key={key}><span className="capitalize">{key === 'roof' ? 'Tak' : key === 'facade' ? 'Fasad' : key === 'windows' ? 'Fönster' : key === 'drainage' ? 'Dränering' : key === 'foundation' ? 'Grund' : key === 'access' ? 'Åtkomst' : key}:</span> {value}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 4. Tidsram */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">4. Tidsram</Label>
+                    <div className="mt-2 space-y-1 text-sm">
+                      {lead.structuredProject.timeline.startTime && (
+                        <div><span className="font-medium">Starttid:</span> {lead.structuredProject.timeline.startTime}</div>
+                      )}
+                      {lead.structuredProject.timeline.deadline && (
+                        <div><span className="font-medium">Deadline:</span> {lead.structuredProject.timeline.deadline}</div>
+                      )}
+                      {lead.structuredProject.timeline.restrictions && (
+                        <div><span className="font-medium">Restriktioner:</span> {lead.structuredProject.timeline.restrictions}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 5. Kostnad */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">5. Kostnad</Label>
+                    <div className="mt-2 space-y-1 text-sm">
+                      {lead.structuredProject.cost.budgetRange && (
+                        <div><span className="font-medium">Budget:</span> {lead.structuredProject.cost.budgetRange}</div>
+                      )}
+                      {lead.structuredProject.cost.financing && (
+                        <div><span className="font-medium">Finansiering:</span> {lead.structuredProject.cost.financing}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 6. Status & risk */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">6. Status & risk</Label>
+                    <div className="mt-2 space-y-1 text-sm">
+                      {Object.entries(lead.structuredProject.riskAssessment).map(([key, value]) => 
+                        value && (
+                          <div key={key}>
+                            <span className="font-medium capitalize">
+                              {key === 'moisture' ? 'Fukt' : 
+                               key === 'mold' ? 'Mögel' : 
+                               key === 'asbestos' ? 'Asbest' : 
+                               key === 'radon' ? 'Radon' : 
+                               key === 'heritage' ? 'Kulturklassning' : 
+                               key === 'other' ? 'Övrigt' : key}:
+                            </span> {value}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* AI Summary (fallback) */}
+            {!lead.structuredProject && lead.aiSummary && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
@@ -279,44 +438,6 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
                       {lead.aiSummary}
                     </p>
                   </div>
-                  
-                  {lead.structuredSummary && (
-                    <div>
-                      <Label className="text-xs text-muted-foreground">Uppstolpat (bredare kategorier)</Label>
-                      <div className="bg-muted p-4 rounded-md mt-1 space-y-3 text-sm">
-                        {lead.structuredSummary.customer && (
-                          <div>
-                            <span className="font-medium">Kund:</span> {lead.structuredSummary.customer}
-                          </div>
-                        )}
-                        {lead.structuredSummary.project && (
-                          <div>
-                            <span className="font-medium">Projekt:</span> {lead.structuredSummary.project}
-                          </div>
-                        )}
-                        {lead.structuredSummary.building && (
-                          <div className="ml-4">
-                            <span className="font-medium">• Bygg:</span> {lead.structuredSummary.building}
-                          </div>
-                        )}
-                        {lead.structuredSummary.hvac && (
-                          <div className="ml-4">
-                            <span className="font-medium">• VVS:</span> {lead.structuredSummary.hvac}
-                          </div>
-                        )}
-                        {lead.structuredSummary.electrical && (
-                          <div className="ml-4">
-                            <span className="font-medium">• El:</span> {lead.structuredSummary.electrical}
-                          </div>
-                        )}
-                        {lead.structuredSummary.ventilation && (
-                          <div className="ml-4">
-                            <span className="font-medium">• Ventilation:</span> {lead.structuredSummary.ventilation}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </CardContent>
               </Card>
             )}
