@@ -26,7 +26,18 @@ const LeadDetail = () => {
   useEffect(() => {
     const savedLeads = JSON.parse(localStorage.getItem('leads') || '[]');
     const foundLead = savedLeads.find((l: Lead) => l.id === id);
-    setLead(foundLead || null);
+    if (foundLead) {
+      // Update Mats's description if this is his lead
+      if (foundLead.id === 'lead-mats') {
+        foundLead.detailedDescription = "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort badkaret och ersätta det med duschväggar samt en ny kommod. Toaletten behålls på samma plats, men handfatet ska flyttas närmare dörren. Ventilationen ska förbättras genom installation av en ny fläkt. Han önskar elgolvvärme i golvet och byte av den gamla golvbrunnen.";
+        // Update localStorage with the new description
+        const updatedLeads = savedLeads.map((l: Lead) => 
+          l.id === 'lead-mats' ? foundLead : l
+        );
+        localStorage.setItem('leads', JSON.stringify(updatedLeads));
+      }
+      setLead(foundLead);
+    }
   }, [id]);
 
   const handleUpdateLead = (updates: Partial<Lead>) => {
