@@ -30,6 +30,8 @@ const LeadDetail = () => {
       if (typeof foundLead.createdAt === 'string') {
         foundLead.createdAt = new Date(foundLead.createdAt);
       }
+      console.log('Found lead:', foundLead);
+      console.log('AI Summary:', foundLead.structuredProject?.aiSummary);
       setLead(foundLead);
     }
   }, [id]);
