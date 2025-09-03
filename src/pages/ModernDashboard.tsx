@@ -132,7 +132,7 @@ const ModernDashboard = () => {
         {
           id: "lead-mats",
           serviceType: "Badrumsrenovering",
-          scope: "Ta bort badkar, installera duschväggar",
+          scope: "Badrumsrenovering med duschinstallation, ny fläkt och elgolvvärme",
           location: "Lerum",
           timeframe: "Inom 2 veckor",
           notes: "Chat genomförd med AI-assistent",
@@ -146,7 +146,7 @@ const ModernDashboard = () => {
           customerName: "Mats Nilsson",
           customerContact: "mats.svensson@email.com",
           customerAddress: "Björkvägen 7, Lerum",
-          detailedDescription: "Mats Nilsson har skickat in en förfrågan om totalrenovering av sitt cirka 9 m² stora badrum i Lerum. Han vill ta bort det befintliga badkaret och istället sätta in duschväggar samt en ny kommod. Toaletten kan stå kvar på sin nuvarande plats, men handfatet ska flyttas närmare dörren. Ventilationen fungerar dåligt och Mats vill därför installera en ny fläkt. Han önskar även elgolvvärme i golvet och byte av den gamla golvbrunnen.",
+          detailedDescription: "Totalrenovering av 9 m² badrum i Lerum. Ta bort badkar och installera duschväggar, flytta handfat närmare dörren, ny ventilationsfläkt och elgolvvärme.",
           projectType: "Badrum",
           renovationType: "Renovering",
           hasCompletedChat: true
