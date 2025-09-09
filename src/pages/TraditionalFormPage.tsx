@@ -1,5 +1,5 @@
 import React from 'react';
-import TraditionalIntakeForm from '@/components/TraditionalIntakeForm';
+import ProfessionalIntakeForm from '@/components/ProfessionalIntakeForm';
 
 const TraditionalFormPage: React.FC = () => {
   const handleFormSubmit = (data: any) => {
@@ -7,7 +7,7 @@ const TraditionalFormPage: React.FC = () => {
     // Handle form submission - already handled in component
   };
 
-  return <TraditionalIntakeForm onSubmit={handleFormSubmit} />;
+  return <ProfessionalIntakeForm onSubmit={handleFormSubmit} />;
 };
 
 export default TraditionalFormPage;
