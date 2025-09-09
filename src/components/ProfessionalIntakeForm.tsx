@@ -92,11 +92,11 @@ const ProfessionalIntakeForm: React.FC<ProfessionalIntakeFormProps> = ({ onSubmi
 
   const handleServiceChange = (serviceId: string, checked: boolean) => {
     const currentServices = form.getValues('services');
-    if (checked) {
-      form.setValue('services', [...currentServices, serviceId]);
-    } else {
-      form.setValue('services', currentServices.filter(id => id !== serviceId));
-    }
+    const newServices = checked 
+      ? [...currentServices, serviceId]
+      : currentServices.filter(id => id !== serviceId);
+    
+    form.setValue('services', newServices, { shouldValidate: true });
   };
 
   const nextStep = async () => {
@@ -276,39 +276,36 @@ const ProfessionalIntakeForm: React.FC<ProfessionalIntakeFormProps> = ({ onSubmi
             </div>
             
             <div className="grid md:grid-cols-2 gap-4">
-              {services.map(service => (
-                <div
-                  key={service.id}
-                  className="relative group cursor-pointer"
-                  onClick={() => {
-                    const isSelected = watchedServices.includes(service.id);
-                    handleServiceChange(service.id, !isSelected);
-                  }}
-                >
-                  <div className={`
-                    p-4 rounded-lg border-2 transition-all duration-200
-                    ${watchedServices.includes(service.id) 
-                      ? 'border-primary bg-primary/5 shadow-sm' 
-                      : 'border-border hover:border-primary/50 hover:bg-muted/50'
-                    }
-                  `}>
-                    <div className="flex items-start space-x-3">
-                      <Checkbox
-                        checked={watchedServices.includes(service.id)}
-                        onCheckedChange={(checked) => handleServiceChange(service.id, checked === true)}
-                        className="mt-1"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <span className="text-xl">{service.icon}</span>
-                          <h3 className="font-medium text-foreground">{service.label}</h3>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{service.description}</p>
+              {services.map(service => {
+                const isSelected = watchedServices.includes(service.id);
+                return (
+                  <div key={service.id} className="relative group">
+                    <div className={`
+                      p-4 rounded-lg border-2 transition-all duration-200
+                      ${isSelected 
+                        ? 'border-primary bg-primary/5 shadow-sm' 
+                        : 'border-border hover:border-primary/50 hover:bg-muted/50'
+                      }
+                    `}>
+                      <div className="flex items-start space-x-3">
+                        <Checkbox
+                          id={`service-${service.id}`}
+                          checked={isSelected}
+                          onCheckedChange={(checked) => handleServiceChange(service.id, checked === true)}
+                          className="mt-1"
+                        />
+                        <label htmlFor={`service-${service.id}`} className="flex-1 cursor-pointer">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <span className="text-xl">{service.icon}</span>
+                            <h3 className="font-medium text-foreground">{service.label}</h3>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{service.description}</p>
+                        </label>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             
             {form.formState.errors.services && (
