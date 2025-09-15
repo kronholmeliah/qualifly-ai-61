@@ -56,9 +56,9 @@ const ModernDashboard = () => {
 
   // Filter leads
   const filteredLeads = leads.filter(lead => {
-    const matchesSearch = lead.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         lead.serviceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         lead.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (lead.customerName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (lead.serviceType || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (lead.location || '').toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === "all" || lead.status === statusFilter;
     
