@@ -265,7 +265,7 @@ const ModernDashboard = () => {
                   <div className="flex items-center gap-3">
                     <Avatar className="h-12 w-12">
                       <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                        {lead.customerName.split(' ').map(n => n[0]).join('')}
+                        {(lead.customerName || 'N/A').split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
                     </Avatar>
                     <div>
