@@ -157,7 +157,7 @@ const LeadDetail = () => {
                       <div className="flex justify-between items-center">
                         <Button variant="outline" size="sm" asChild>
                           <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.customerAddress)}`}
+                            href={`https://maps.google.com/maps?q=${encodeURIComponent(lead.customerAddress)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2"
