@@ -128,12 +128,50 @@ const LeadDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Karta och Street View sida vid sida */}
+            {/* Kombinerad Karta och Street View */}
             {lead.customerAddress && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <GoogleMapsEmbed address={lead.customerAddress} />
-                <StreetViewStatic address={lead.customerAddress} />
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MapPin className="h-5 w-5" />
+                    Karta & Street View
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Google Maps */}
+                    <div className="space-y-4">
+                      <div className="rounded-lg overflow-hidden border">
+                        <iframe
+                          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyA1IILY3T9YwXVkMlshkOMnLxBsCoQDHzo&q=${encodeURIComponent(lead.customerAddress)}`}
+                          width="100%"
+                          height="300"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title="Google Maps"
+                        />
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.customerAddress)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-primary hover:underline"
+                        >
+                          Öppna i Google Maps
+                        </a>
+                      </div>
+                    </div>
+                    
+                    {/* Street View */}
+                    <div className="space-y-4">
+                      <StreetViewStatic address={lead.customerAddress} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             )}
 
             {/* 🏗️ Strukturerad Projektsammanställning */}
