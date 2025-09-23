@@ -157,10 +157,19 @@ const LeadDetail = () => {
                       <div className="flex justify-between items-center">
                         <Button variant="outline" size="sm" asChild>
                           <a
-                            href={`https://maps.google.com/maps?q=${encodeURIComponent(lead.customerAddress)}`}
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.customerAddress)}`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              window.open(
+                                `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.customerAddress)}`,
+                                '_blank',
+                                'noopener,noreferrer'
+                              );
+                            }}
                             className="flex items-center gap-2"
+                            title={`Öppna ${lead.customerAddress} i Google Maps`}
                           >
                             <ExternalLink className="h-4 w-4" />
                             Öppna i Google Maps
