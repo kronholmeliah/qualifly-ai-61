@@ -11,6 +11,7 @@ import LeadDetail from "./pages/LeadDetail";
 import IntakePage from "./pages/IntakePage";
 import BuildingCompany from "./pages/BuildingCompany";
 import TraditionalFormPage from "./pages/TraditionalFormPage";
+import QuoteGenerator from "./pages/QuoteGenerator";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/modern-dashboard" element={<ModernDashboard />} />
           <Route path="/admin/lead/:id" element={<LeadDetail />} />
+          <Route path="/admin/quote/:id" element={<QuoteGenerator />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
