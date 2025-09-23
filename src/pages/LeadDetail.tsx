@@ -186,37 +186,26 @@ const LeadDetail = () => {
                   )}
 
                   {/* 4. Tidsram */}
-                  {(lead.structuredProject.timeline.startTime || lead.structuredProject.timeline.deadline) && (
-                    <div>
-                      <h5 className="font-medium mb-2">4. Tidsram</h5>
-                      <div className="space-y-1 text-sm">
-                        {lead.structuredProject.timeline.startTime && (
-                          <div><span className="font-medium">Start:</span> {lead.structuredProject.timeline.startTime}</div>
-                        )}
-                        {lead.structuredProject.timeline.deadline && (
-                          <div><span className="font-medium">Deadline:</span> {lead.structuredProject.timeline.deadline}</div>
-                        )}
-                        {lead.structuredProject.timeline.restrictions && (
-                          <div><span className="font-medium">Restriktioner:</span> {lead.structuredProject.timeline.restrictions}</div>
-                        )}
-                      </div>
+                  <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Calendar className="h-4 w-4 text-primary" />
+                      <h5 className="font-medium text-primary">Tidsram</h5>
                     </div>
-                  )}
+                    <p className="text-lg font-semibold text-foreground">Inom två veckor</p>
+                    <p className="text-sm text-muted-foreground mt-1">Projektet kan påbörjas snart</p>
+                  </div>
 
                   {/* 5. Kostnad */}
-                  {(lead.structuredProject.cost.budgetRange || lead.structuredProject.cost.financing) && (
-                    <div>
-                      <h5 className="font-medium mb-2">5. Kostnad</h5>
-                      <div className="space-y-1 text-sm">
-                        {lead.structuredProject.cost.budgetRange && (
-                          <div><span className="font-medium">Budget:</span> {lead.structuredProject.cost.budgetRange}</div>
-                        )}
-                        {lead.structuredProject.cost.financing && (
-                          <div><span className="font-medium">Finansiering:</span> {lead.structuredProject.cost.financing}</div>
-                        )}
-                      </div>
+                  <div className="bg-gradient-to-r from-success/10 to-success/5 p-4 rounded-lg border border-success/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Euro className="h-4 w-4 text-success" />
+                      <h5 className="font-medium text-success">Uppskattad kostnad</h5>
                     </div>
-                  )}
+                    <p className="text-xl font-bold text-foreground">
+                      {lead.structuredProject?.cost?.budgetRange || `${lead.estimatedCost || '150 000'} - ${lead.finalPrice || '200 000'} kr`}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">Preliminär kostnadsuppskattning</p>
+                  </div>
                 </CardContent>
               </Card>
             ) : (
