@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { GoogleMapsEmbed } from "@/components/ui/google-maps-embed";
+import { StreetViewStatic } from "@/components/ui/street-view-static";
 import { Lead } from "@/types/lead";
 import { getScoreColor, getScoreEmoji } from "@/utils/leadScoring";
 import { 
@@ -130,6 +131,11 @@ const LeadDetail = () => {
             {/* Karta */}
             {lead.customerAddress && (
               <GoogleMapsEmbed address={lead.customerAddress} />
+            )}
+
+            {/* Street View */}
+            {lead.customerAddress && (
+              <StreetViewStatic address={lead.customerAddress} />
             )}
 
             {/* 🏗️ Strukturerad Projektsammanställning */}
