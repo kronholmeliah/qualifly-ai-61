@@ -17,7 +17,8 @@ import {
   Phone,
   Home,
   Wrench,
-  ClipboardList
+  ClipboardList,
+  ExternalLink
 } from "lucide-react";
 
 const LeadDetail = () => {
@@ -154,14 +155,17 @@ const LeadDetail = () => {
                         />
                       </div>
                       <div className="flex justify-between items-center">
-                        <a
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.customerAddress)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-primary hover:underline"
-                        >
-                          Öppna i Google Maps
-                        </a>
+                        <Button variant="outline" size="sm" asChild>
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.customerAddress)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            Öppna i Google Maps
+                          </a>
+                        </Button>
                       </div>
                     </div>
                     
