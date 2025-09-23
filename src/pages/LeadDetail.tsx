@@ -128,14 +128,12 @@ const LeadDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Karta */}
+            {/* Karta och Street View sida vid sida */}
             {lead.customerAddress && (
-              <GoogleMapsEmbed address={lead.customerAddress} />
-            )}
-
-            {/* Street View */}
-            {lead.customerAddress && (
-              <StreetViewStatic address={lead.customerAddress} />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <GoogleMapsEmbed address={lead.customerAddress} />
+                <StreetViewStatic address={lead.customerAddress} />
+              </div>
             )}
 
             {/* 🏗️ Strukturerad Projektsammanställning */}
@@ -185,27 +183,6 @@ const LeadDetail = () => {
                     </div>
                   )}
 
-                  {/* 4. Tidsram */}
-                  <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <h5 className="font-medium text-primary">Tidsram</h5>
-                    </div>
-                    <p className="text-lg font-semibold text-foreground">Inom två veckor</p>
-                    <p className="text-sm text-muted-foreground mt-1">Projektet kan påbörjas snart</p>
-                  </div>
-
-                  {/* 5. Kostnad */}
-                  <div className="bg-gradient-to-r from-success/10 to-success/5 p-4 rounded-lg border border-success/20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Euro className="h-4 w-4 text-success" />
-                      <h5 className="font-medium text-success">Uppskattad kostnad</h5>
-                    </div>
-                    <p className="text-xl font-bold text-foreground">
-                      {lead.structuredProject?.cost?.budgetRange || `${lead.estimatedCost || '150 000'} - ${lead.finalPrice || '200 000'} kr`}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-1">Preliminär kostnadsuppskattning</p>
-                  </div>
                 </CardContent>
               </Card>
             ) : (
@@ -465,36 +442,25 @@ const LeadDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Timeframe */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            {/* Tidsram */}
+            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-primary">
                   <Calendar className="h-5 w-5" />
                   Tidsram
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{lead.location}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{lead.timeframe}</span>
-                </div>
-                <Separator />
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Uppskattad kostnad</span>
-                    <span className="text-sm font-medium">{(lead.estimatedCost || 0).toLocaleString("sv-SE")} kr</span>
+              <CardContent>
+                <div className="text-center space-y-2">
+                  <div className="text-2xl font-bold text-foreground">
+                    Inom två veckor
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Marginal</span>
-                    <span className="text-sm font-medium">{lead.margin || 0}%</span>
+                  <div className="text-sm text-muted-foreground">
+                    Projektet kan påbörjas snart
                   </div>
-                  <div className="flex justify-between font-medium">
-                    <span className="text-sm">Rekommenderat pris</span>
-                    <span className="text-sm text-primary">{(lead.finalPrice || 0).toLocaleString("sv-SE")} kr</span>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full text-sm text-primary font-medium mt-3">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                    Redo att starta
                   </div>
                 </div>
               </CardContent>
