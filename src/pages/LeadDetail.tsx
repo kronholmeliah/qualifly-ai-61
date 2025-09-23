@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { GoogleMapsEmbed } from "@/components/ui/google-maps-embed";
 import { StreetViewStatic } from "@/components/ui/street-view-static";
 import { Lead } from "@/types/lead";
-import { getScoreColor, getScoreEmoji } from "@/utils/leadScoring";
+import { getScoreColor, getScoreEmoji, calculateLeadScore } from "@/utils/leadScoring";
 import { 
   ArrowLeft, 
   MapPin, 
@@ -18,7 +18,11 @@ import {
   Home,
   Wrench,
   ClipboardList,
-  ExternalLink
+  ExternalLink,
+  TrendingUp,
+  Clock,
+  AlertTriangle,
+  FileText
 } from "lucide-react";
 
 const LeadDetail = () => {
@@ -67,6 +71,7 @@ const LeadDetail = () => {
 
   const scoreColor = getScoreColor(lead.score);
   const scoreEmoji = getScoreEmoji(lead.score);
+  const { factors } = calculateLeadScore(lead);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-surface to-background">
@@ -187,53 +192,72 @@ const LeadDetail = () => {
               </Card>
             )}
 
-            {/* 🏗️ Strukturerad Projektsammanställning */}
+            {/* 📋 Integrerad Projektöversikt */}
             {lead.structuredProject ? (
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <ClipboardList className="h-5 w-5" />
-                    🏗️ Strukturerad projektsammanställning
+                    📋 Projektöversikt
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Sammanfattning */}
-                  <div>
-                    <h4 className="font-medium mb-2">Sammanfattning</h4>
-                    <p className="text-muted-foreground leading-relaxed bg-muted p-4 rounded-md">
-                      {lead.structuredProject.executiveSummary}
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  {/* Grundläggande projektinfo */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">1. Projekttyp</p>
-                      <p className="font-medium">{lead.structuredProject.projectCategory}</p>
+                <CardContent className="space-y-8">
+                  {/* 1. Projektsammanfattning */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-lg font-semibold text-primary">
+                      <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">1</div>
+                      Projektsammanfattning
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Storlek</p>
-                      <p className="font-medium">{lead.structuredProject.scope.size}</p>
-                    </div>
-                  </div>
-
-                  {/* 2. Omfattning */}
-                  {(lead.structuredProject.scope.demolition || lead.structuredProject.scope.newConstruction) && (
-                    <div>
-                      <h5 className="font-medium mb-2">2. Omfattning</h5>
-                      <div className="space-y-2 text-sm">
-                        {lead.structuredProject.scope.demolition && (
-                          <div><span className="font-medium">Rivning:</span> {lead.structuredProject.scope.demolition}</div>
-                        )}
-                        {lead.structuredProject.scope.newConstruction && (
-                          <div><span className="font-medium">Nybyggnation:</span> {lead.structuredProject.scope.newConstruction}</div>
-                        )}
+                    <div className="ml-8 space-y-3">
+                      <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-6 rounded-lg border-l-4 border-primary">
+                        <p className="text-foreground leading-relaxed font-medium">
+                          {lead.structuredProject.executiveSummary}
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div className="bg-card border rounded-lg p-4">
+                          <p className="text-sm font-medium text-muted-foreground mb-1">Projekttyp</p>
+                          <p className="font-semibold text-primary">{lead.structuredProject.projectCategory}</p>
+                        </div>
+                        <div className="bg-card border rounded-lg p-4">
+                          <p className="text-sm font-medium text-muted-foreground mb-1">Storlek</p>
+                          <p className="font-semibold">{lead.structuredProject.scope.size}</p>
+                        </div>
+                        <div className="bg-card border rounded-lg p-4">
+                          <p className="text-sm font-medium text-muted-foreground mb-1">Tidsram</p>
+                          <p className="font-semibold">{lead.timeframe}</p>
+                        </div>
                       </div>
                     </div>
-                  )}
+                  </div>
 
+                  <Separator className="my-6" />
+
+                  {/* 2. Omfattning & Arbetsmomenter */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-lg font-semibold text-primary">
+                      <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">2</div>
+                      Omfattning & Arbetsmomenter
+                    </div>
+                    <div className="ml-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {lead.structuredProject.scope.demolition && (
+                        <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-destructive font-medium">🔨 Rivning</span>
+                          </div>
+                          <p className="text-sm text-foreground">{lead.structuredProject.scope.demolition}</p>
+                        </div>
+                      )}
+                      {lead.structuredProject.scope.newConstruction && (
+                        <div className="bg-success/5 border border-success/20 rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-success font-medium">🏗️ Nybyggnation</span>
+                          </div>
+                          <p className="text-sm text-foreground">{lead.structuredProject.scope.newConstruction}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             ) : (
@@ -241,157 +265,185 @@ const LeadDetail = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <ClipboardList className="h-5 w-5" />
-                    Projektbeskrivning
+                    📋 Projektöversikt
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-medium mb-2">Detaljerad beskrivning</h4>
-                      <p className="text-muted-foreground">{lead.detailedDescription}</p>
+                <CardContent className="space-y-6">
+                  <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-6 rounded-lg border-l-4 border-primary">
+                    <h4 className="font-semibold mb-3 text-primary">Projektbeskrivning</h4>
+                    <p className="text-foreground leading-relaxed">{lead.detailedDescription}</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-card border rounded-lg p-4">
+                      <p className="text-sm font-medium text-muted-foreground mb-1">Projekttyp</p>
+                      <p className="font-semibold text-primary">{lead.projectType}</p>
                     </div>
-                    <Separator />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">Projekttyp</p>
-                        <p className="font-medium">{lead.projectType}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Typ</p>
-                        <p className="font-medium">{lead.renovationType}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Omfattning</p>
-                        <p className="font-medium">{lead.scope}</p>
-                      </div>
+                    <div className="bg-card border rounded-lg p-4">
+                      <p className="text-sm font-medium text-muted-foreground mb-1">Typ</p>
+                      <p className="font-semibold">{lead.renovationType}</p>
+                    </div>
+                    <div className="bg-card border rounded-lg p-4">
+                      <p className="text-sm font-medium text-muted-foreground mb-1">Omfattning</p>
+                      <p className="font-semibold">{lead.scope}</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* 3. Tekniska krav */}
+            {/* 3. Tekniska Specifikationer */}
             {lead.structuredProject?.technicalRequirements ? (
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Wrench className="h-5 w-5" />
-                    3. Tekniska krav
+                    🔧 Tekniska Specifikationer
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Bygg & stomme */}
-                  {lead.structuredProject.technicalRequirements.construction && (
-                    <div>
-                      <h5 className="font-medium text-muted-foreground mb-2">Bygg & stomme</h5>
-                      <div className="space-y-1 text-sm ml-4">
-                        {Object.entries(lead.structuredProject.technicalRequirements.construction).map(([key, value]) => 
-                          value && (
-                            <div key={key}>
-                              <span className="font-medium">
-                                {key === 'walls' ? 'Väggar' : key === 'floors' ? 'Golv' : key === 'ceiling' ? 'Tak' : 
-                                 key === 'structural' ? 'Bärande' : key === 'surfacing' ? 'Ytskikt' : key}:
-                              </span> {value}
-                            </div>
-                          )
-                        )}
-                      </div>
+                <CardContent className="space-y-8">
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-2 text-lg font-semibold text-primary">
+                      <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">3</div>
+                      Teknisk Genomgång per Område
                     </div>
-                  )}
 
-                  {/* VVS */}
-                  {lead.structuredProject.technicalRequirements.plumbing && (
-                    <div>
-                      <h5 className="font-medium text-muted-foreground mb-2">VVS</h5>
-                      <div className="space-y-1 text-sm ml-4">
-                        {Object.entries(lead.structuredProject.technicalRequirements.plumbing).map(([key, value]) => 
-                          value && (
-                            <div key={key}>
-                              <span className="font-medium">
-                                {key === 'waterSupply' ? 'Vatten/avlopp' : key === 'drains' ? 'Golvbrunn' : 
-                                 key === 'heating' ? 'Värme/golvvärme' : key}:
-                              </span> {value}
-                            </div>
-                          )
-                        )}
+                    {/* Bygg & stomme */}
+                    {lead.structuredProject.technicalRequirements.construction && (
+                      <div className="ml-8 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="text-2xl">🏗️</span>
+                          <h5 className="font-semibold text-yellow-800">Bygg & Stomme</h5>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {Object.entries(lead.structuredProject.technicalRequirements.construction).map(([key, value]) => 
+                            value && (
+                              <div key={key} className="bg-white/60 border border-yellow-200/50 rounded-md p-3">
+                                <span className="font-medium text-yellow-900">
+                                  {key === 'walls' ? 'Väggar' : key === 'floors' ? 'Golv' : key === 'ceiling' ? 'Tak' : 
+                                   key === 'structural' ? 'Bärande' : key === 'surfacing' ? 'Ytskikt' : key}:
+                                </span>
+                                <p className="text-sm text-yellow-800 mt-1">{value}</p>
+                              </div>
+                            )
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* El & styr */}
-                  {lead.structuredProject.technicalRequirements.electrical && (
-                    <div>
-                      <h5 className="font-medium text-muted-foreground mb-2">El & styr</h5>
-                      <div className="space-y-1 text-sm ml-4">
-                        {Object.entries(lead.structuredProject.technicalRequirements.electrical).map(([key, value]) => 
-                          value && (
-                            <div key={key}>
-                              <span className="font-medium">
-                                {key === 'outlets' ? 'Uttag' : key === 'panel' ? 'Central' : key === 'lighting' ? 'Belysning' : 
-                                 key === 'floorHeating' ? 'Golvvärme' : key}:
-                              </span> {value}
-                            </div>
-                          )
-                        )}
+                    {/* VVS */}
+                    {lead.structuredProject.technicalRequirements.plumbing && (
+                      <div className="ml-8 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-lg p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="text-2xl">🚰</span>
+                          <h5 className="font-semibold text-blue-800">VVS (Vatten, Värme, Sanitet)</h5>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {Object.entries(lead.structuredProject.technicalRequirements.plumbing).map(([key, value]) => 
+                            value && (
+                              <div key={key} className="bg-white/60 border border-blue-200/50 rounded-md p-3">
+                                <span className="font-medium text-blue-900">
+                                  {key === 'waterSupply' ? 'Vatten/avlopp' : key === 'drains' ? 'Golvbrunn' : 
+                                   key === 'heating' ? 'Värme/golvvärme' : key}:
+                                </span>
+                                <p className="text-sm text-blue-800 mt-1">{value}</p>
+                              </div>
+                            )
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Ventilation */}
-                  {lead.structuredProject.technicalRequirements.ventilation && (
-                    <div>
-                      <h5 className="font-medium text-muted-foreground mb-2">Ventilation & inomhusklimat</h5>
-                      <div className="space-y-1 text-sm ml-4">
-                        {Object.entries(lead.structuredProject.technicalRequirements.ventilation).map(([key, value]) => 
-                          value && (
-                            <div key={key}>
-                              <span className="font-medium">
-                                {key === 'fans' ? 'Fläktar' : key === 'ducts' ? 'Kanaler' : key === 'airflow' ? 'Luftflöde' : key}:
-                              </span> {value}
-                            </div>
-                          )
-                        )}
+                    {/* El & styr */}
+                    {lead.structuredProject.technicalRequirements.electrical && (
+                      <div className="ml-8 bg-gradient-to-r from-yellow-50 to-amber-50 border border-amber-200 rounded-lg p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="text-2xl">⚡</span>
+                          <h5 className="font-semibold text-amber-800">El & Styr</h5>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {Object.entries(lead.structuredProject.technicalRequirements.electrical).map(([key, value]) => 
+                            value && (
+                              <div key={key} className="bg-white/60 border border-amber-200/50 rounded-md p-3">
+                                <span className="font-medium text-amber-900">
+                                  {key === 'outlets' ? 'Uttag' : key === 'panel' ? 'Central' : key === 'lighting' ? 'Belysning' : 
+                                   key === 'floorHeating' ? 'Golvvärme' : key}:
+                                </span>
+                                <p className="text-sm text-amber-800 mt-1">{value}</p>
+                              </div>
+                            )
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Klimatskal / Mark */}
-                  {lead.structuredProject.technicalRequirements.building && (
-                    <div>
-                      <h5 className="font-medium text-muted-foreground mb-2">Klimatskal / Mark</h5>
-                      <div className="space-y-1 text-sm ml-4">
-                        {Object.entries(lead.structuredProject.technicalRequirements.building).map(([key, value]) => 
-                          value && (
-                            <div key={key}>
-                              <span className="font-medium">
-                                {key === 'roof' ? 'Tak' : key === 'facade' ? 'Fasad' : key === 'windows' ? 'Fönster' : 
-                                 key === 'drainage' ? 'Dränering' : key === 'foundation' ? 'Grund' : key === 'access' ? 'Åtkomst' : key}:
-                              </span> {value}
-                            </div>
-                          )
-                        )}
+                    {/* Ventilation */}
+                    {lead.structuredProject.technicalRequirements.ventilation && (
+                      <div className="ml-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="text-2xl">💨</span>
+                          <h5 className="font-semibold text-green-800">Ventilation & Inomhusklimat</h5>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {Object.entries(lead.structuredProject.technicalRequirements.ventilation).map(([key, value]) => 
+                            value && (
+                              <div key={key} className="bg-white/60 border border-green-200/50 rounded-md p-3">
+                                <span className="font-medium text-green-900">
+                                  {key === 'fans' ? 'Fläktar' : key === 'ducts' ? 'Kanaler' : key === 'airflow' ? 'Luftflöde' : key}:
+                                </span>
+                                <p className="text-sm text-green-800 mt-1">{value}</p>
+                              </div>
+                            )
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* 6. Status & risk */}
-                  {lead.structuredProject.riskAssessment && Object.values(lead.structuredProject.riskAssessment).some(v => v) && (
-                    <div>
-                      <h5 className="font-medium text-muted-foreground mb-2">6. Status & risk</h5>
-                      <div className="space-y-1 text-sm ml-4">
-                        {Object.entries(lead.structuredProject.riskAssessment).map(([key, value]) => 
-                          value && (
-                            <div key={key}>
-                              <span className="font-medium">
-                                {key === 'moisture' ? 'Fukt' : key === 'mold' ? 'Mögel' : key === 'asbestos' ? 'Asbest' : 
-                                 key === 'radon' ? 'Radon' : key === 'heritage' ? 'Kulturklassning' : key === 'other' ? 'Övrigt' : key}:
-                              </span> {value}
-                            </div>
-                          )
-                        )}
+                    {/* Klimatskal / Mark */}
+                    {lead.structuredProject.technicalRequirements.building && (
+                      <div className="ml-8 bg-gradient-to-r from-purple-50 to-violet-50 border border-purple-200 rounded-lg p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="text-2xl">🏠</span>
+                          <h5 className="font-semibold text-purple-800">Klimatskal & Mark</h5>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {Object.entries(lead.structuredProject.technicalRequirements.building).map(([key, value]) => 
+                            value && (
+                              <div key={key} className="bg-white/60 border border-purple-200/50 rounded-md p-3">
+                                <span className="font-medium text-purple-900">
+                                  {key === 'roof' ? 'Tak' : key === 'facade' ? 'Fasad' : key === 'windows' ? 'Fönster' : 
+                                   key === 'drainage' ? 'Dränering' : key === 'foundation' ? 'Grund' : key === 'access' ? 'Åtkomst' : key}:
+                                </span>
+                                <p className="text-sm text-purple-800 mt-1">{value}</p>
+                              </div>
+                            )
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+
+                    {/* Risk Assessment */}
+                    {lead.structuredProject.riskAssessment && Object.values(lead.structuredProject.riskAssessment).some(v => v) && (
+                      <div className="ml-8 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-lg p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="text-2xl">⚠️</span>
+                          <h5 className="font-semibold text-red-800">Riskbedömning & Särskilda Förhållanden</h5>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {Object.entries(lead.structuredProject.riskAssessment).map(([key, value]) => 
+                            value && (
+                              <div key={key} className="bg-white/60 border border-red-200/50 rounded-md p-3">
+                                <span className="font-medium text-red-900">
+                                  {key === 'moisture' ? 'Fukt' : key === 'mold' ? 'Mögel' : key === 'asbestos' ? 'Asbest' : 
+                                   key === 'radon' ? 'Radon' : key === 'heritage' ? 'Kulturklassning' : key === 'other' ? 'Övrigt' : key}:
+                                </span>
+                                <p className="text-sm text-red-800 mt-1">{value}</p>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ) : lead.technicalRequirements && (
@@ -444,51 +496,157 @@ const LeadDetail = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Lead Score & Status */}
+            {/* Lead Score & Explanation */}
             <Card>
               <CardHeader>
-                <CardTitle>Lead Score & Status</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Lead Score & Ranking
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
                 <div className="text-center">
                   <Badge 
                     variant={scoreColor === "success" ? "default" : scoreColor === "warning" ? "secondary" : "destructive"}
                     className="text-lg px-4 py-2"
                   >
-                    {scoreEmoji} {lead.score}
+                    {scoreEmoji} {lead.score} poäng
                   </Badge>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {lead.score >= 80 ? "Högt prioriterat lead" : 
+                     lead.score >= 60 ? "Medel prioriterat lead" : "Lågt prioriterat lead"}
+                  </p>
                 </div>
+
                 <Separator />
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Status</p>
-                  <Badge variant="outline">
-                    {lead.status === "new" ? "Ny" : 
-                     lead.status === "contacted" ? "Kontaktad" : 
-                     lead.status === "quoted" ? "Offererad" : "Stängd"}
-                  </Badge>
+
+                {/* Score Breakdown */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-sm text-muted-foreground">RANKING FÖRKLARING</h4>
+                  
+                  {/* Economic Potential */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Euro className="h-4 w-4 text-success" />
+                        <span className="text-sm font-medium">Ekonomisk potential</span>
+                        <span className="text-xs text-muted-foreground">(40%)</span>
+                      </div>
+                      <span className="text-sm font-medium">{Math.round(factors.economicPotential)}</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-success h-2 rounded-full transition-all duration-300" 
+                        style={{ width: `${factors.economicPotential}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Baserat på uppskattad kostnad: {lead.estimatedCost.toLocaleString("sv-SE")} kr
+                    </p>
+                  </div>
+
+                  {/* Complexity */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4 text-warning" />
+                        <span className="text-sm font-medium">Komplexitet & risk</span>
+                        <span className="text-xs text-muted-foreground">(25%)</span>
+                      </div>
+                      <span className="text-sm font-medium">{Math.round(factors.complexity)}</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-warning h-2 rounded-full transition-all duration-300" 
+                        style={{ width: `${factors.complexity}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {lead.serviceType} - {factors.complexity >= 70 ? "Låg komplexitet" : 
+                       factors.complexity >= 50 ? "Medel komplexitet" : "Hög komplexitet"}
+                    </p>
+                  </div>
+
+                  {/* Time Criticality */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-primary" />
+                        <span className="text-sm font-medium">Tidskritikalitet</span>
+                        <span className="text-xs text-muted-foreground">(20%)</span>
+                      </div>
+                      <span className="text-sm font-medium">{Math.round(factors.timeframe)}</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-primary h-2 rounded-full transition-all duration-300" 
+                        style={{ width: `${factors.timeframe}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Önskar start: {lead.timeframe} - {factors.timeframe >= 80 ? "Mycket bråttom" : 
+                       factors.timeframe >= 60 ? "Måttligt bråttom" : "Ej bråttom"}
+                    </p>
+                  </div>
+
+                  {/* Customer Seriousness */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-4 w-4 text-secondary" />
+                        <span className="text-sm font-medium">Kundallvar</span>
+                        <span className="text-xs text-muted-foreground">(15%)</span>
+                      </div>
+                      <span className="text-sm font-medium">{Math.round(factors.seriousness)}</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-secondary h-2 rounded-full transition-all duration-300" 
+                        style={{ width: `${factors.seriousness}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {lead.attachments.length > 0 ? `${lead.attachments.length} bifogade filer` : "Inga filer"} • 
+                      {lead.notes.length > 50 ? " Detaljerade anteckningar" : " Korta anteckningar"}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button 
-                    size="sm" 
-                    variant={lead.status === "contacted" ? "default" : "outline"}
-                    onClick={() => handleUpdateLead({ status: "contacted" })}
-                  >
-                    Kontaktad
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant={lead.status === "quoted" ? "default" : "outline"}
-                    onClick={() => handleUpdateLead({ status: "quoted" })}
-                  >
-                    Offererad
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant={lead.status === "closed" ? "default" : "outline"}
-                    onClick={() => handleUpdateLead({ status: "closed" })}
-                  >
-                    Stängd
-                  </Button>
+
+                <Separator />
+
+                {/* Status Management */}
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Lead Status</p>
+                    <Badge variant="outline" className="text-sm">
+                      {lead.status === "new" ? "Ny" : 
+                       lead.status === "contacted" ? "Kontaktad" : 
+                       lead.status === "quoted" ? "Offererad" : "Stängd"}
+                    </Badge>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      size="sm" 
+                      variant={lead.status === "contacted" ? "default" : "outline"}
+                      onClick={() => handleUpdateLead({ status: "contacted" })}
+                    >
+                      Kontaktad
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant={lead.status === "quoted" ? "default" : "outline"}
+                      onClick={() => handleUpdateLead({ status: "quoted" })}
+                    >
+                      Offererad
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant={lead.status === "closed" ? "default" : "outline"}
+                      onClick={() => handleUpdateLead({ status: "closed" })}
+                    >
+                      Stängd
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
