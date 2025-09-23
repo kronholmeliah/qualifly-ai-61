@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { GoogleMapsEmbed } from "@/components/ui/google-maps-embed";
 import { Lead } from "@/types/lead";
 import { getScoreColor, getScoreEmoji } from "@/utils/leadScoring";
 import { 
@@ -125,6 +126,11 @@ const LeadDetail = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Karta */}
+            {lead.customerAddress && (
+              <GoogleMapsEmbed address={lead.customerAddress} />
+            )}
 
             {/* 🏗️ Strukturerad Projektsammanställning */}
             {lead.structuredProject ? (
