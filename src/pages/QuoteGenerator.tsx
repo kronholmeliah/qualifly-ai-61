@@ -77,15 +77,17 @@ Garanti: 5 år på utfört arbete, 2 år på material.`
   const generateQuoteContent = (leadData: any) => {
     const summary = generateStructuredProjectSummary(leadData);
     
-    // Generate work description
-    const description = summary.projektinnehall.join(' ');
+    // Generate work description with fallback
+    const description = summary?.projektinnehall?.length > 0 
+      ? summary.projektinnehall.join(' ')
+      : leadData.kort_beskrivning || leadData.projekttyp || 'Byggarbeten enligt överenskommelse';
     setQuoteInfo(prev => ({ ...prev, workDescription: description }));
     
     // Generate quote items based on technical requirements
     const items: QuoteItem[] = [];
     let itemCounter = 1;
     
-    if (summary.tekniska_krav["Bygg & stomme"] === "[x]") {
+    if (summary?.tekniska_krav?.["Bygg & stomme"] === "[x]") {
       items.push({
         id: String(itemCounter++),
         description: "Bygg- och stommarbeten",
@@ -96,7 +98,7 @@ Garanti: 5 år på utfört arbete, 2 år på material.`
       });
     }
     
-    if (summary.tekniska_krav["VVS"] === "[x]") {
+    if (summary?.tekniska_krav?.["VVS"] === "[x]") {
       items.push({
         id: String(itemCounter++),
         description: "VVS-installation",
@@ -107,7 +109,7 @@ Garanti: 5 år på utfört arbete, 2 år på material.`
       });
     }
     
-    if (summary.tekniska_krav["El & styr"] === "[x]") {
+    if (summary?.tekniska_krav?.["El & styr"] === "[x]") {
       items.push({
         id: String(itemCounter++),
         description: "Elinstallation",
@@ -118,7 +120,7 @@ Garanti: 5 år på utfört arbete, 2 år på material.`
       });
     }
     
-    if (summary.tekniska_krav["Ventilation & inomhusklimat"] === "[x]") {
+    if (summary?.tekniska_krav?.["Ventilation & inomhusklimat"] === "[x]") {
       items.push({
         id: String(itemCounter++),
         description: "Ventilation",
@@ -129,7 +131,7 @@ Garanti: 5 år på utfört arbete, 2 år på material.`
       });
     }
     
-    if (summary.tekniska_krav["Klimatskal"] === "[x]") {
+    if (summary?.tekniska_krav?.["Klimatskal"] === "[x]") {
       items.push({
         id: String(itemCounter++),
         description: "Klimatskal och ytskikt",
