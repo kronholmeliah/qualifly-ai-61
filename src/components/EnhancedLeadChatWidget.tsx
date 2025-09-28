@@ -103,6 +103,7 @@ const statusAlternativ = [
 export const EnhancedLeadChatWidget: React.FC<EnhancedLeadChatWidgetProps> = ({ onLeadSubmitted }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(CHAT_STEPS.GREETING);
+  const [isThinking, setIsThinking] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -139,6 +140,33 @@ export const EnhancedLeadChatWidget: React.FC<EnhancedLeadChatWidgetProps> = ({ 
 
   const [inputValue, setInputValue] = useState("");
 
+  const askAI = async (hint: string, context: DetailedLeadData, chatHistory: ChatMessage[]) => {
+    try {
+      const response = await fetch('https://zbtgwopsqyicoxnwabsq.functions.supabase.co/functions/v1/ai-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: chatHistory,
+          context,
+          hint
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (data.reply) {
+        return data.reply;
+      } else {
+        return data.fallback || hint;
+      }
+    } catch (error) {
+      console.error('AI chat error:', error);
+      return hint; // Fallback to original question
+    }
+  };
+
   const addMessage = (content: string, type: "bot" | "user", options?: string[]) => {
     const newMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -157,20 +185,38 @@ export const EnhancedLeadChatWidget: React.FC<EnhancedLeadChatWidgetProps> = ({ 
     }
   };
 
-  const handleTextInput = (field: keyof DetailedLeadData, nextMessage: string) => {
+  const handleTextInput = async (field: keyof DetailedLeadData, nextMessage: string) => {
     if (!inputValue.trim()) return;
     
-    setLeadData(prev => ({ ...prev, [field]: inputValue }));
+    // Save user's answer
+    const updatedLeadData = { ...leadData, [field]: inputValue };
+    setLeadData(updatedLeadData);
     addMessage(inputValue, "user");
-    addMessage(nextMessage, "bot");
+    
+    // Get AI response
+    setIsThinking(true);
+    const chatHistory = [...messages, { id: Date.now().toString(), type: "user" as const, content: inputValue }];
+    const aiResponse = await askAI(nextMessage, updatedLeadData, chatHistory);
+    setIsThinking(false);
+    
+    addMessage(aiResponse, "bot");
     nextStep();
     setInputValue("");
   };
 
-  const handleOptionSelect = (field: keyof DetailedLeadData, value: string, nextMessage: string, options?: string[]) => {
-    setLeadData(prev => ({ ...prev, [field]: value }));
+  const handleOptionSelect = async (field: keyof DetailedLeadData, value: string, nextMessage: string, options?: string[]) => {
+    // Save user's selection
+    const updatedLeadData = { ...leadData, [field]: value };
+    setLeadData(updatedLeadData);
     addMessage(value, "user");
-    addMessage(nextMessage, "bot", options);
+    
+    // Get AI response
+    setIsThinking(true);
+    const chatHistory = [...messages, { id: Date.now().toString(), type: "user" as const, content: value }];
+    const aiResponse = await askAI(nextMessage, updatedLeadData, chatHistory);
+    setIsThinking(false);
+    
+    addMessage(aiResponse, "bot", options);
     nextStep();
   };
 
@@ -455,7 +501,22 @@ export const EnhancedLeadChatWidget: React.FC<EnhancedLeadChatWidgetProps> = ({ 
             ))}
           </div>
           
-          {currentStep !== CHAT_STEPS.SUMMARY && (
+          {isThinking && (
+            <div className="flex justify-start">
+              <div className="bg-muted text-muted-foreground px-3 py-2 rounded-lg text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                  AI skriver...
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {currentStep !== CHAT_STEPS.SUMMARY && !isThinking && (
             <div className="pt-2 border-t">
               {renderChatInput()}
             </div>
